@@ -1,3 +1,4 @@
+#wget https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/cosmos_sei_install.sh && chmod +x cosmos_sei_install.sh %% ./cosmos_sei_install.sh
 if [ ! $NODENAME ]; then
 	read -p "Node name: " NODENAME
 	echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
@@ -182,7 +183,8 @@ sudo systemctl daemon-reload
 
 visorver=v1.1.0
 cd $HOME
-git clone git@github.com:cosmos/cosmos-sdk
+#git clone git@github.com:cosmos/cosmos-sdk
+git clone https://github.com/cosmos/cosmos-sdk
 cd cosmos-sdk
 git checkout cosmovisor/$visorver
 make cosmovisor
