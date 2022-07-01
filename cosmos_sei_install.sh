@@ -184,7 +184,7 @@ sudo systemctl daemon-reload
 visorver=v1.1.0
 cd $HOME
 #git clone git@github.com:cosmos/cosmos-sdk
-git clone https://github.com/cosmos/cosmos-sdk
+git clone --branch main https://github.com/cosmos/cosmos-sdk
 cd cosmos-sdk
 git checkout cosmovisor/$visorver
 make cosmovisor
