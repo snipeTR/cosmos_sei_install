@@ -32,7 +32,7 @@ sudo rm -rf /usr/local/go
 sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz"
 rm "go$ver.linux-amd64.tar.gz"
 echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
-source ~/.bash_profile
+source ~/.Bash_Profile
 go version
 
 echo -e "\e[1m\e[32m3. kutuphaneler indirilip yukleniyor... \e[0m"
@@ -196,8 +196,8 @@ seidbuildver=$($HOME/go/bin/seid version)
 if [ "$seidbuildver" == "$seidver" ]; then
     cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/genesis/bin
 else
-    echo -e "\e[1m\e[31m3. Error version not match $seidver \e[0m"
-    echo -e "\e[1m\e[31m3. please check $HOME/go/bin/seid version file \e[0m"
+    echo -e "\e[1m\e[31m2. Error version not match $seidver \e[0m"
+    echo -e "\e[1m\e[31m2. please check $HOME/go/bin/seid version file \e[0m"
     read -s -n 1 -p "Press any key to EXIT . . ."
 exit 13
 fi
@@ -249,8 +249,8 @@ seidbuildver=$($HOME/go/bin/seid version)
 if [ "$seidbuildver" == "$seidver" ]; then
     cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$seidver/bin
 else
-    echo -e "\e[1m\e[31m3. Error version not match $seidver \e[0m"
-    echo -e "\e[1m\e[31m3. please check $HOME/go/bin/seid version file \e[0m"
+    echo -e "\e[1m\e[31m4. Error version not match $seidver \e[0m"
+    echo -e "\e[1m\e[31m4. please check $HOME/go/bin/seid version file \e[0m"
     read -s -n 1 -p "Press any key to EXIT . . ."
 exit 13
 fi
@@ -276,8 +276,8 @@ seidbuildver=$($HOME/go/bin/seid version)
 if [ "$seidbuildver" == "$seidver" ]; then
     cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$seidver%20upgrade/bin
 else
-    echo -e "\e[1m\e[31m3. Error version not match $seidver \e[0m"
-    echo -e "\e[1m\e[31m3. please check $HOME/go/bin/seid version file \e[0m"
+    echo -e "\e[1m\e[31m5. Error version not match $seidver \e[0m"
+    echo -e "\e[1m\e[31m5. please check $HOME/go/bin/seid version file \e[0m"
     read -s -n 1 -p "Press any key to EXIT . . ."
 exit 13
 fi
