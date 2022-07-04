@@ -515,7 +515,7 @@ else
   fi
 fi
 mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
-cp $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
+cp $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
 
 cd $HOME
 #install helpsei command
