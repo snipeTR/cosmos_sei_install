@@ -1,64 +1,186 @@
-#wget https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/cosmos_sei_install.sh && chmod +x cosmos_sei_install.sh %% ./cosmos_sei_install.sh
+#snipeTR 2022 dscrd:snipeTR#8374
+#karboran 2022 dscrd:karboran#2719
+#Apache License Version 2.0
+#################################################################################################################
+#                                                                                                               #
+#  This script is for cosmovisor and sei-chain node setup.
+#                                                                                                               #
+#  cosmovisor is an automatic node update and tracking system for the cosmos ecosystem.
+#                                                                                                               #
+#  Here's what the script does:
+#                                                                                                               #
+#  It installs the 1.0.2beta version of the seid application for sei-chain-testnet-2.
+#                                                                                                               #
+#  Makes various configuration changes of 1.0.2beta version of seid application for sei-chain-testnet-2.
+#                                                                                                               #
+#  It installs and builds the cosmovisor application.
+#                                                                                                               #
+#  Creates the folder structure required for the cosmovisor application.
+#                                                                                                               #
+#  Installs seid 1.0.2beta version to the cosmovisor application.
+#                                                                                                               #
+#  It downloads seid 1.0.3beta version, builds it and installs it on the cosmovisor application.
+#                                                                                                               #
+#  seid downloads the 1.0.4beta version, builds it and installs it on the cosmovisor application.
+#                                                                                                               #
+#  seid downloads the 1.0.5beta version, builds it and installs it on the cosmovisor application.
+#                                                                                                               #
+#  seid downloads the 1.0.6beta version, builds and installs it on the cosmovisor application.
+#                                                                                                               #
+#################################################################################################################
+
+#~/.sei/cosmovisor
+#       ├─ current -> genesis or upgrades/<name>
+#      	├── genesis
+#      	│    └── bin
+#      	│      └── seid
+#      	├── upgrades
+#      	│   └── 1.0.3beta
+#      	│       ├── bin
+#      	│       │   └── seid
+#      	│       └── upgrade-info.json
+#      	├── upgrades
+#      	│   └── 1.0.4beta
+#      	│       ├── bin
+#      	│       │   └── seid
+#      	│       └── upgrade-info.json
+#      	├── upgrades
+#      	│   └── 1.0.5beta%20upgrade
+#      	│       ├── bin
+#      	│       │   └── seid
+#      	│       └── upgrade-info.json
+#      	└── upgrades
+#      	    └── 1.0.6beta%20upgrade
+#      	        ├── bin
+#      	        │   └── seid
+#      	        └── upgrade-info.json
+
 if [ ! $NODENAME ]; then
-	read -p "Node name: " NODENAME
-	echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
+        read -p "Node name: " NODENAME
+        echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
 fi
+if [ ! $WALLET ]; then
 echo "export WALLET=wallet" >> $HOME/.bash_profile
+fi
+if [ ! $CHAIN_ID ]; then
 echo "export CHAIN_ID=sei-testnet-2" >> $HOME/.bash_profile
-echo "DAEMON_RESTART_AFTER_UPGRADE=true" >> $HOME/.bash_profile
-echo "DAEMON_NAME=seid" >> $HOME/.bash_profile
-echo "DAEMON_HOME=$HOME/.sei" >> $HOME/.bash_profile
+fi
+if [ ! $DAEMON_RESTART_AFTER_UPGRADE ]; then
+echo "export DAEMON_RESTART_AFTER_UPGRADE=true" >> $HOME/.bash_profile
+fi
+if [ ! $DAEMON_NAME ]; then
+echo "export DAEMON_NAME=seid" >> $HOME/.bash_profile
+fi
+if [ ! $DAEMON_HOME ]; then
+echo "export DAEMON_HOME=$HOME/.sei" >> $HOME/.bash_profile
+fi
+if [ ! $SEIDVER ]; then
+echo "export SEIDVER=1.0.2beta" >> $HOME/.bash_profile
+fi
+if [ ! $VISORVER ]; then
+echo "export VISORVER=v1.1.0" >> $HOME/.bash_profile
+fi
 source $HOME/.bash_profile
 
 echo '================================================='
-echo 'Node name: ' $NODENAME
-echo 'wallet name: ' $WALLET
-echo 'Chain ismi: ' $CHAIN_ID
+echo test variable
+echo NODENAME:$NODENAME
+echo WALLET:$WALLET
+echo CHAIN_ID:$CHAIN_ID
+echo DAEMON_RESTART_AFTER_UPGRADE:$DAEMON_RESTART_AFTER_UPGRADE
+echo DAEMON_NAME:$DAEMON_NAME
+echo DAEMON_HOME:$DAEMON_HOME
+echo SEIDVER:$SEIDVER
+echo VISORVER:$VISORVER
 echo '================================================='
+read -s -n 1 -p "Are the above values correct? If true, press a key. If false, exit with ctrl+c"
 
+
+
+
+
+sudo systemctl stop seid
+sudo systemctl disable seid
+sudo systemctl disable seid.service
+sudo systemctl daemon-reload
+echo -e "\e[1m\e[32m old seid services disable and stop\e[0m" && sleep 1
+
+
+sleep 1
 echo -e "\e[1m\e[32m1. Update and Upgrade check... \e[0m" && sleep 1
 # update
 sudo apt update && sudo apt upgrade -y
 
 echo -e "\e[1m\e[32m2. installing tools and libs... \e[0m" && sleep 1
 # packages
-sudo apt install curl tar wget clang pkg-config libssl-dev jq build-essential bsdmainutils git make ncdu gcc git jq chrony liblz4-tool -y
+sudo apt install curl tar wget clang pkg-config libssl-dev jq build-essential bsdmainutils git make ncdu gcc git jq chrony tmux net-tools liblz4-tool -y
 
-# install go
-ver="1.18.3"
+
+sleep 1
 cd $HOME
-wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz"
-sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz"
-rm "go$ver.linux-amd64.tar.gz"
-echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
-source ~/.Bash_Profile
+wget -O go1.18.1.linux-amd64.tar.gz https://golang.org/dl/go1.18.1.linux-amd64.tar.gz
+rm -rf /usr/local/go && tar -C /usr/local -xzf go1.18.1.linux-amd64.tar.gz && rm go1.18.1.linux-amd64.tar.gz
+echo 'export GOROOT=/usr/local/go' >> $HOME/.bash_profile
+echo 'export GOPATH=$HOME/go' >> $HOME/.bash_profile
+echo 'export GO111MODULE=on' >> $HOME/.bash_profile
+echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> $HOME/.bash_profile && . $HOME/.bash_profile
 go version
+source $HOME/.bash_profile
 
-echo -e "\e[1m\e[32m3. kutuphaneler indirilip yukleniyor... \e[0m"
+
+
+echo -e "\e[1m\e[32m3. sei-chain library download and install... \e[0m"
 
 # download binary
 cd $HOME
-seidver=1.0.2beta
-git clone --depth 1 --branch $seidver https://github.com/sei-protocol/sei-chain.git
+echo git clone --depth 1 --branch $SEIDVER https://github.com/sei-protocol/sei-chain.git
+git clone --depth 1 --branch $SEIDVER https://github.com/sei-protocol/sei-chain.git
 cd sei-chain && make install
 go build -o build/seid ./cmd/seid
-chmod +x ./build/seid && sudo cp ./build/seid /usr/local/bin/seid
+
+#unnecessary maybe necessary
+#chmod +x ./build/seid && sudo cp ./build/seid /usr/local/bin/seid
 
 sleep 1
 
+#impornant
 cp $HOME/go/bin/seid /usr/local/bin/
 
 mv $HOME/.sei-chain $HOME/.sei
-#mv $HOME/sei-chain $HOME/sei
+
+
+#if not exist /usr/local/bin/seid write ERROR
+#if exist /usr/local/bin/seid and version NOT not match write ERROR
+if [ ! -f "/usr/local/bin/seid" ]; then
+    echo "/usr/local/bin/seid FILE NOT EXIST"
+    read -s -n 1 -p "Press any key to EXIT . . ."
+    exit 13
+else
+  SEIDBUILDVER=$(/usr/local/bin/seid version)
+  if [ "$SEIDBUILDVER" == "$SEIDVER" ]; then
+  	echo /usr/local/bin/seid version $SEIDVER
+  else
+    	echo -e "\e[1m\e[31m2. Error version not match $SEIDVER \e[0m"
+    	echo -e "\e[1m\e[31m2. please check /usr/local/bin/seid version file \e[0m"
+    	read -s -n 1 -p "Press any key to EXIT . . ."
+  	exit 13
+  fi
+fi
+
 
 # config
 seid config chain-id $CHAIN_ID
 seid config keyring-backend file
 
-  CONFIG_PATH="$HOME/.sei/config/config.toml"
+# init
+seid init $NODENAME --chain-id $CHAIN_ID
 
+# download genesis and addrbook
+wget -qO $HOME/.sei/config/genesis.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-testnet-2/genesis.json"
+wget -qO $HOME/.sei/config/addrbook.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-testnet-2/addrbook.json"
 
+#Tuning config.toml
+CONFIG_PATH="$HOME/.sei/config/config.toml"
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   sed -i 's/max_num_inbound_peers =.*/max_num_inbound_peers = 150/g' $CONFIG_PATH
   sed -i 's/max_num_outbound_peers =.*/max_num_outbound_peers = 150/g' $CONFIG_PATH
@@ -89,23 +211,15 @@ else
   printf "\t timeout_precommit = \"100ms\"\n"
   printf "\t timeout_commit = \"100ms\"\n"
   printf "\t skip_timeout_commit = true\n"
-  exit 1
+  read -s -n 1 -p "Press any key to EXIT . . ."
+  exit 13
 fi
-
-
-
-
-# init
-seid init $NODENAME --chain-id $CHAIN_ID
-
-# download genesis and addrbook
-wget -qO $HOME/.sei/config/genesis.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-testnet-2/genesis.json"
-wget -qO $HOME/.sei/config/addrbook.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-testnet-2/addrbook.json"
 
 # set minimum gas price
 sed -i -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0usei\"/" $HOME/.sei/config/app.toml
 
-# PEERS="8c6d2fc68f02ba8127fb8d5a7a65cbc75f57d05b@167.172.186.140:36656,6a605a26b1b4ac6baac1f06dcc5bc6e6d0a8be46@213.136.88.4:26656,17381b81322b23371b4882b2139fe06bcbf4d29e@173.212.212.197:36376,c951b5be19b4406e95a50abed0f1886ed38ed28a@89.163.164.207:26656,b03f9917af7556b4958f7eb23f18a77eba81bc1f@194.146.12.169:36376,3370dab8eaa935f4bc6cfad81e0af751caee5686@195.2.84.133:26656"
+# Type the peers you want to add here and delete the two comment characters below.
+# PEERS=""
 # sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.sei/config/config.toml
 
 # config pruning
@@ -119,21 +233,45 @@ sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"$pruning_keep_rec
 sed -i -e "s/^pruning-keep-every *=.*/pruning-keep-every = \"$pruning_keep_every\"/" $HOME/.sei/config/app.toml
 sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $HOME/.sei/config/app.toml
 
-sleep 1
 
-#Change port 37
-#sed -i.bak -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.0.0.1:36378\"%; s%^laddr = \"tcp://127.0.0.1:26657\"%laddr = \"tcp://127.0.0.1:36377\"%; s%^pprof_laddr = \"localhost:6060\"%pprof_laddr = \"localhost:6371\"%; s%^laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:36376\"%; s%^prometheus_listen_addr = \":26660\"%prometheus_listen_addr = \":36370\"%" $HOME/.sei/config/config.toml
-#sed -i.bak -e "s%^address = \"0.0.0.0:9090\"%address = \"0.0.0.0:9370\"%; s%^address = \"0.0.0.0:9091\"%address = \"0.0.0.0:9371\"%" $HOME/.sei/config/app.toml
-#sed -i.bak -e "s%^node = \"tcp://localhost:26657\"%node = \"tcp://localhost:36377\"%" $HOME/.sei/config/client.toml
+#When you are going to run multiple NODEs on the same server, please change the ports using the commands below to avoid port conflict.
+#Change port 37 
+#------------------------------
+#26658 to 36378
+port_a=36378
+
+#26657 to 36377
+port_b=36377
+
+#6060 to 6371 
+port_c=6371
+
+#26656 to 36376
+port_d=36376
+
+#26660 to 36370
+port_e=36370
+
+#9090 to 9370
+port_f=9370
+
+#9091 to 9371
+port_g=9371
+
+#------------------------------
+
+#To make the above changes, delete the comment character of the 5 lines below.
+#sed -i.bak -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.0.0.1:$port_a\"%; s%^laddr = \"tcp://127.0.0.1:26657\"%laddr = \"tcp://127.0.0.1:$port_b\"%; s%^pprof_laddr = \"localhost:6060\"%pprof_laddr = \"localhost:$port_c\"%; s%^laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:$port_d\"%; s%^prometheus_listen_addr = \":26660\"%prometheus_listen_addr = \":$port_e\"%" $HOME/.sei/config/config.toml
+#sed -i.bak -e "s%^address = \"0.0.0.0:9090\"%address = \"0.0.0.0:$port_f\"%; s%^address = \"0.0.0.0:9091\"%address = \"0.0.0.0:$port_g\"%" $HOME/.sei/config/app.toml
+#sed -i.bak -e "s%^node = \"tcp://localhost:26657\"%node = \"tcp://localhost:$port_b\"%" $HOME/.sei/config/client.toml
 #external_address=$(wget -qO- eth0.me)
-#sed -i.bak -e "s/^external_address *=.*/external_address = \"$external_address:36376\"/" $HOME/.sei/config/config.toml
+#sed -i.bak -e "s/^external_address *=.*/external_address = \"$external_address:$port_d\"/" $HOME/.sei/config/config.toml
 
-sleep 1 
-
+sleep 1
 # reset
 seid unsafe-reset-all
 
-echo -e "\e[1m\e[32m4. Servisler baslatiliyor... \e[0m" && sleep 1
+echo -e "\e[1m\e[32m4. Make and start SERVICES... \e[0m" && sleep 1
 # create service
 tee $HOME/seid.service > /dev/null <<EOF
 [Unit]
@@ -154,153 +292,256 @@ sudo mv $HOME/seid.service /etc/systemd/system/
 
 # start service
 sudo systemctl daemon-reload
+#              	disable start and enable
 #sudo systemctl enable seid
 #sudo systemctl restart seid
 
 #cosmovisor install
 
-#~/.sei/cosmovisor
-#├── current -> genesis or upgrades/<name>
-#├── genesis
-#│   └── bin
-#│       └── seid
-#├── upgrades
-#│   └── 1.0.3beta
-#│       ├── bin
-#│       │   └── seid
-#│       └── upgrade-info.json
-#├── upgrades
-#│   └── 1.0.4beta
-#│       ├── bin
-#│       │   └── seid
-#│        └── upgrade-info.json
-#└── upgrades
-#    └── 1.0.5beta%20upgrade
-#        ├── bin
-#        │   └── seid
-#        └── upgrade-info.json
 
 
-visorver=v1.1.0
+
+
+#cosmovisor build
 cd $HOME
+rm -rf ./cosmos-sdk
 #git clone git@github.com:cosmos/cosmos-sdk
-git clone --branch main https://github.com/cosmos/cosmos-sdk
+git clone --depth 1 --branch main https://github.com/cosmos/cosmos-sdk
+
+#$HOME/cosmos-sdk/cosmovisor/cmd/cosmovisor/version.go file, line 21 [Version = "1.1.0"] >>> change >>> [Version = "v1.1.0"]
+#sed -i -e "s/Version *=.*/Version = \"v1.1.0\"/" $HOME/cosmos-sdk/cosmovisor/cmd/cosmovisor/version.go
+
 cd cosmos-sdk
-git checkout cosmovisor/$visorver
+#git checkout cosmovisor/$VISORVER
 make cosmovisor
 
-# Checkout the binary for genesis 1.0.2beta 
-# if not right version exit script.
-mkdir -p $DAEMON_HOME/cosmovisor/genesis/bin
-seidbuildver=$($HOME/go/bin/seid version)
-if [ "$seidbuildver" == "$seidver" ]; then
-    cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/genesis/bin
-else
-    echo -e "\e[1m\e[31m2. Error version not match $seidver \e[0m"
-    echo -e "\e[1m\e[31m2. please check $HOME/go/bin/seid version file \e[0m"
+#if commovisor exist $HOME/cosmos-sdk/cosmovisor/ and version 1.1.0 copy usr/local/bin
+if [ ! -f "$HOME/cosmos-sdk/cosmovisor/cosmovisor" ]; then
+    echo "cosmovisor not build. ERROR ERROR"
     read -s -n 1 -p "Press any key to EXIT . . ."
-exit 13
+  	exit 13
+#          cosmovisor version check unnessesery
+#	else
+#  chmod +x $HOME/cosmos-sdk/cosmovisor/cosmovisor
+#  VISORBUILDVER=$($HOME/cosmos-sdk/cosmovisor/cosmovisor version)
+#  
+#  #reformat variable (v1.1.0 for :21:6)
+#  #********************************************************************************************
+#  #(Cosmovisor Version: v1.1.0 9:56PM ERR Can't ru...)<<<---- variable string(please paste)  *
+#  #(                    ^    ^                    ...)                    *
+#  #(1234567890123456789012345678901234567890123456...)<<<---- char counting          *
+#  #(                    ^    ^                    ...)                    *
+#  #(               21-->123456<--6                ...)<<<---- number meaning ${variable:21:6}	*
+#  #********************************************************************************************
+#  #reformat variable (v1.1.0 for :21:6)
+#  
+#  VISORBUILDVER=${VISORBUILDVER:21:6}
+#  	if [ "$VISORBUILDVER" == "$VISORVER" ]; then
+#      	cp $HOME/cosmos-sdk/cosmovisor/cosmovisor /usr/local/bin/
+#    else
+#      	echo -e "\e[1m\e[31m Error version not match $VISORVER \e[0m"
+#      	echo -e "\e[1m\e[31m please check $HOME/cosmos-sdk/cosmovisor/cosmovisor version file \e[0m"
+#      	read -s -n 1 -p "Press any key to EXIT . . ."
+#    	exit 13
+#    fi
+fi
+cp $HOME/cosmos-sdk/cosmovisor/cosmovisor /usr/local/bin/
+#Checkout the binary for genesis 1.0.2beta on cosmovisor
+cd $HOME
+mkdir -p $DAEMON_HOME/cosmovisor/genesis/bin
+cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/genesis/bin
+#if not exist $DAEMON_HOME/cosmovisor/genesis/bin/seid write ERROR
+if [ -f "$DAEMON_HOME/cosmovisor/genesis/bin/seid" ]; then
+     echo $DAEMON_HOME/cosmovisor/genesis/bin/seid file copy successful
+else
+      	echo -e "\e[1m\e[31m ERROR $HOME/go/bin/seid not copy $DAEMON_HOME/cosmovisor/genesis/bin \e[0m"
+      	echo -e "\e[1m\e[31m please check $HOME/go/bin/seid file \e[0m"
+      	read -s -n 1 -p "Press any key to EXIT . . ."
+    	exit 13
 fi
 
 
 
-# Checkout the binary for 1.0.3beta
-seidver=1.0.3beta
+
+# Checkout the binary for 1.0.3beta on cosmovisor
+#set version
+SEIDVER=1.0.3beta
 cd $HOME
+#remove old sei-chain directory
 rm -rf sei-chain
-git clone https://github.com/sei-protocol/sei-chain.git
+#clone sei-chain
+git clone --depth 1 https://github.com/sei-protocol/sei-chain.git
 cd sei-chain/
 git fetch --tags -f
-git checkout $seidver
-# Build the new tool
+git checkout $SEIDVER
+# Build the new version
 make install
 go build -o build/seid ./cmd/seid
 # Checkout the binary for 1.0.xbeta
 # if not right version exit script.
 cd $HOME
-mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$seidver/bin
-
-if [ "$seidbuildver" == "$seidver" ]; then
-    cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$seidver/bin
-else
-    echo -e "\e[1m\e[31m3. Error version not match $seidver \e[0m"
-    echo -e "\e[1m\e[31m3. please check $HOME/go/bin/seid version file \e[0m"
+#create cosmovisor upgrade directory
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
+#copy new seid version correct upgrade cosmovisor directory
+cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
+if [ ! -f "$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid" ]; then
+    echo "$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid FILE NOT EXIST"
     read -s -n 1 -p "Press any key to EXIT . . ."
-exit 13
+    exit 13
+else
+  SEIDBUILDVER=$($DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid version)
+  if [ "$SEIDBUILDVER" == "$SEIDVER" ]; then
+  	echo $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid version $SEIDVER
+  else
+    	echo -e "\e[1m\e[31m2. Error version not match $SEIDVER \e[0m"
+    	echo -e "\e[1m\e[31m2. please check $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin version file \e[0m"
+    	read -s -n 1 -p "Press any key to EXIT . . ."
+  	exit 13
+  fi
 fi
+
 
 # Checkout the binary for 1.0.4beta
-seidver=1.0.4beta
+SEIDVER=1.0.4beta
 cd $HOME
+#remove old sei-chain directory
 rm -rf sei-chain
-git clone https://github.com/sei-protocol/sei-chain.git
+#clone sei-chain
+git clone --depth 1 https://github.com/sei-protocol/sei-chain.git
 cd sei-chain/
 git fetch --tags -f
-git checkout $seidver
-# Build the new tool
+git checkout $SEIDVER
+# Build the new version
 make install
 go build -o build/seid ./cmd/seid
 # Checkout the binary for 1.0.xbeta
 # if not right version exit script.
 cd $HOME
-mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$seidver/bin
-seidbuildver=$($HOME/go/bin/seid version)
-
-if [ "$seidbuildver" == "$seidver" ]; then
-    cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$seidver/bin
-else
-    echo -e "\e[1m\e[31m4. Error version not match $seidver \e[0m"
-    echo -e "\e[1m\e[31m4. please check $HOME/go/bin/seid version file \e[0m"
+#create cosmovisor upgrade directory
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
+#copy new seid version correct upgrade cosmovisor directory
+cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
+if [ ! -f "$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid" ]; then
+    echo "$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid FILE NOT EXIST"
     read -s -n 1 -p "Press any key to EXIT . . ."
-exit 13
+    exit 13
+else
+  SEIDBUILDVER=$($DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid version)
+  if [ "$SEIDBUILDVER" == "$SEIDVER" ]; then
+  	echo $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid version $SEIDVER
+  else
+    	echo -e "\e[1m\e[31m2. Error version not match $SEIDVER \e[0m"
+    	echo -e "\e[1m\e[31m2. please check $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin version file \e[0m"
+    	read -s -n 1 -p "Press any key to EXIT . . ."
+  	exit 13
+  fi
 fi
+#copy alternative
 
 
 # Checkout the binary for 1.0.5beta
-seidver=1.0.5beta
+SEIDVER=1.0.5beta
 cd $HOME
+#remove old sei-chain directory
 rm -rf sei-chain
-git clone https://github.com/sei-protocol/sei-chain.git
+#clone sei-chain
+git clone --depth 1 https://github.com/sei-protocol/sei-chain.git
 cd sei-chain/
 git fetch --tags -f
-git checkout $seidver
-# Build the new tool
+git checkout $SEIDVER
+# Build the new version
 make install
 go build -o build/seid ./cmd/seid
 # Checkout the binary for 1.0.xbeta
 # if not right version exit script.
 cd $HOME
-mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$seidver%20upgrade/bin
-
-seidbuildver=$($HOME/go/bin/seid version)
-if [ "$seidbuildver" == "$seidver" ]; then
-    cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$seidver%20upgrade/bin
-else
-    echo -e "\e[1m\e[31m5. Error version not match $seidver \e[0m"
-    echo -e "\e[1m\e[31m5. please check $HOME/go/bin/seid version file \e[0m"
+#create cosmovisor upgrade directory
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin
+#copy new seid version correct upgrade cosmovisor directory
+cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin
+if [ ! -f "$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid" ]; then
+    echo "$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid FILE NOT EXIST"
     read -s -n 1 -p "Press any key to EXIT . . ."
-exit 13
+    exit 13
+else
+  SEIDBUILDVER=$($DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid version)
+  if [ "$SEIDBUILDVER" == "$SEIDVER" ]; then
+  	echo $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid version $SEIDVER
+  else
+    	echo -e "\e[1m\e[31m2. Error version not match $SEIDVER \e[0m"
+    	echo -e "\e[1m\e[31m2. please check $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrades/bin version file \e[0m"
+    	read -s -n 1 -p "Press any key to EXIT . . ."
+  	exit 13
+  fi
 fi
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
+cp $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
+
+
+
+# Checkout the binary for 1.0.5beta
+SEIDVER=1.0.6beta
+cd $HOME
+#remove old sei-chain directory
+rm -rf sei-chain
+#clone sei-chain
+git clone --depth 1 https://github.com/sei-protocol/sei-chain.git
+cd sei-chain/
+git fetch --tags -f
+git checkout $SEIDVER
+# Build the new version
+make install
+go build -o build/seid ./cmd/seid
+# Checkout the binary for 1.0.xbeta
+# if not right version exit script.
+cd $HOME
+#create cosmovisor upgrade directory
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin
+#copy new seid version correct upgrade cosmovisor directory
+cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin
+if [ ! -f "$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid" ]; then
+    echo "$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid FILE NOT EXIST"
+    read -s -n 1 -p "Press any key to EXIT . . ."
+    exit 13
+else
+  SEIDBUILDVER=$($DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid version)
+  if [ "$SEIDBUILDVER" == "$SEIDVER" ]; then
+  	echo $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid version $SEIDVER
+  else
+    	echo -e "\e[1m\e[31m2. Error version not match $SEIDVER \e[0m"
+    	echo -e "\e[1m\e[31m2. please check $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrades/bin version file \e[0m"
+    	read -s -n 1 -p "Press any key to EXIT . . ."
+  	exit 13
+  fi
+fi
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
+cp $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
 
 cd $HOME
+#install helpsei command
 sudo wget https://raw.githubusercontent.com/snipeTR/sei_help/main/sei_help.sh && chmod +x ./sei_help.sh &&sudo mv ./sei_help.sh /usr/local/bin/helpsei
 
-yapılacaklar
-/usr/local/bin/seid bir link dosyasi olacak ve cosmovisor un current ine baglanacak
+#run first cosmovisor for $HOME/.sei/cosmovisor/current/bin/seid file link create.
+DAEMON_HOME=$HOME/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true ./cosmos-sdk/cosmovisor/cosmovisor run start
+sleep 3
+kill $(pidof cosmovisor)
 
-cosmovisor run start --home ~/.sei
+#remove execute file from local/bin
+rm -rf /usr/local/bin/seid
 
-echo -e '\e[0m\e[31m=============== \e[0m\e[32mCommands that will make your job easier. Please note..\e[0m\e[31m===================\e[0m'
-echo -e '\e[0m\e[36mcheck LOGS:\t\t\t\t \e[0m\e[32mjournalctl -ujournalctl -u seid -f -o cat\e[0m'
-echo -e '\e[0m\e[36msend sei token to other address:\t \e[0m\e[32mseid tx bank send \033[33;4m<WalletName> <ToAddress> <amount>\e[0m\e[32m000000usei -y\e[0m'
-echo -e '\e[0m\e[36mCheck BALANCE:\t\t\t\t \e[0m\e[32mseid query bank balances \033[33;4m<Address>\e[0m\e[32m -o│json | jq -r .balances[0].amount\e[0m'
-echo -e '\e[0m\e[36mLearn MONIKER NAME:\t\t\t \e[0m\e[32mseid status 2>&1 | jq -r .NodeInfo.moniker\e[0m'
-echo -e '\e[0m\e[36msync info command:\t\t\t \e[0m\e[32mseid status 2>&1 | jq .SyncInfo\e[0m'
-echo -e '\e[0m\e[36mwallet list:\t\t\t\t \e[0m\e[32mseid keys list\e[0m'
-echo -e '\e[0m\e[36mvalidator info command:\t\t\t \e[0m\e[32mseid status 2>&1 | jq .ValidatorInfo\e[0m'
-echo -e '\e[0m\e[36mNode info command:\t\t\t \e[0m\e[32mseid status 2>&1 | jq .NodeInfo\e[0m'
-echo -e '\e[0m\e[36mWallet import/recover from mnemonic:\t \e[0m\e[32mseid keys add \033[33;4m<wallet name>\e[0m\e[32m --recover\e[0m'
-echo -e '\e[0m\e[36mseid binary path:\t\t\t \e[0m\e[32mtype seid\e[0m'
-echo -e '\e[0m\e[36mmissed block count:\t\t\t \e[0m\e[32mseid q slashing signing-info $(seid tendermint show-validator) -o json | jq '"Missed: " + .missed_blocks_counter + " block"'\e[0m'
+#add solid link current seid execute to local/bin
+ln -s $HOME/.sei/cosmovisor/current/bin/seid /usr/local/bin/seid
 
+mkdir ~/bkup_cosmovisor_sei
+echo DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start --home ~/.sei>seid_start_with_cosmovisor.sh
+chmod +x seid_start_with_cosmovisor.sh
 
+echo -e "\e[1m\e[32m installation complete...installation complete...installation complete \e[0m"
+echo -e "\e[1m\e[32m If you want to run seid for cosmovisor, run seid_start_with_cosmovisor.sh. \e[0m"
+echo -e "\e[1m\e[32m this command will do the following in order. \e[0m"
+echo -e "\e[1m\e[32m First, the seid 1.0.2beta version will work up to a block height of 153759. \e[0m"
+echo -e "\e[1m\e[32m When it reaches a block height of 153759, seid will run version 1.0.3beta. \e[0m"
+echo -e "\e[1m\e[32m When it reaches a block height of 681000, seid will run version 1.0.4beta. \e[0m"
+echo -e "\e[1m\e[32m When it reaches a block height of 1075040, seid will run version 1.0.5beta. \e[0m"
+echo -e "\e[1m\e[32m When it reaches a block height of 1217302, seid will run version 1.0.6beta. \e[0m"
+echo -e "\e[1m\e[32m To add the versions that will be released later, download and run the script named cosmovisor_sei_add_version.sh \e[0m"
