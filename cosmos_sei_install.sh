@@ -515,7 +515,7 @@ else
   fi
 fi
 mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
-cp $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
+cp $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
 
 cd $HOME
 #install helpsei command
@@ -533,7 +533,7 @@ rm -rf /usr/local/bin/seid
 ln -s $HOME/.sei/cosmovisor/current/bin/seid /usr/local/bin/seid
 
 mkdir ~/bkup_cosmovisor_sei
-echo DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start --home ~/.sei>seid_start_with_cosmovisor.sh
+echo UNSAFE_SKIP_BACKUP=true DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start --home ~/.sei>seid_start_with_cosmovisor.sh
 chmod +x seid_start_with_cosmovisor.sh
 
 echo -e "\e[1m\e[32m installation complete...installation complete...installation complete \e[0m"

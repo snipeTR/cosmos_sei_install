@@ -2,12 +2,14 @@
    read -p "Enter the version you want to add to cosmovisor.(for example me:1.0.6beta)" SEIDVER
 else
    echo "Is $1 the version you want to install?"
-     select yn in "Yes" "No"; do
-          case $yn in
-          Yes ) SEIDVER=$1
-          No ) exit;;
-          esac
-  done
+   read answer
+    if [ "$answer" != "${answer#[Yy]}" ] ;then
+      echo Yes
+      SEIDVER=$1
+    else
+      echo No
+    exit 13
+    fi
 fi
 
 if [ ! $NODENAME ]; then
@@ -17,18 +19,10 @@ fi
 if [ ! $WALLET ]; then
 echo "export WALLET=wallet" >> $HOME/.bash_profile
 fi
-if [ ! $CHAIN_ID ]; then
 echo "export CHAIN_ID=sei-testnet-2" >> $HOME/.bash_profile
-fi
-if [ ! $DAEMON_RESTART_AFTER_UPGRADE ]; then
 echo "export DAEMON_RESTART_AFTER_UPGRADE=true" >> $HOME/.bash_profile
-fi
-if [ ! $DAEMON_NAME ]; then
 echo "export DAEMON_NAME=seid" >> $HOME/.bash_profile
-fi
-if [ ! $DAEMON_HOME ]; then
 echo "export DAEMON_HOME=$HOME/.sei" >> $HOME/.bash_profile
-fi
 if [ ! $SEIDVER ]; then
 echo "export SEIDVER=1.0.2beta" >> $HOME/.bash_profile
 fi
@@ -125,7 +119,7 @@ else
 			exit 13
 		fi
 fi
-mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
 cp $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
 
 #stop cosmovisor
@@ -138,5 +132,5 @@ kill $(pidof cosmovisor)
 ln -s $HOME/.sei/cosmovisor/current/bin/seid /usr/local/bin/seid
 
 mkdir ~/bkup_cosmovisor_sei
-DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start --home ~/.sei
+UNSAFE_SKIP_BACKUP=true DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start --home ~/.sei
 
