@@ -1,5 +1,5 @@
 #!/bin/bash
-#v0.5alpha
+#v0.6alpha
 #snipeTR 2022 dscrd:snipeTR#8374
 #karboran 2022 dscrd:karboran#2719
 #Apache License Version 2.0
