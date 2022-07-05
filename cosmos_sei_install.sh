@@ -229,25 +229,25 @@ sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" "
 #Change port 37 
 #------------------------------
 #26658 to 36378
-port_a=36378
+port_a=26658
 
 #26657 to 36377
-port_b=36377
+port_b=26657
 
 #6060 to 6371 
-port_c=6371
+port_c=6060
 
 #26656 to 36376
-port_d=36376
+port_d=26656
 
 #26660 to 36370
-port_e=36370
+port_e=26660
 
 #9090 to 9370
-port_f=9370
+port_f=9090
 
 #9091 to 9371
-port_g=9371
+port_g=9091
 #------------------------------
 #To make the above changes, delete the comment character of the 5 lines below.
 #sed -i.bak -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.0.0.1:$port_a\"%; s%^laddr = \"tcp://127.0.0.1:26657\"%laddr = \"tcp://127.0.0.1:$port_b\"%; s%^pprof_laddr = \"localhost:6060\"%pprof_laddr = \"localhost:$port_c\"%; s%^laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:$port_d\"%; s%^prometheus_listen_addr = \":26660\"%prometheus_listen_addr = \":$port_e\"%" $HOME/.sei/config/config.toml
@@ -522,7 +522,7 @@ rm -rf /usr/local/bin/seid
 ln -s "$HOME"/.sei/cosmovisor/current/bin/seid /usr/local/bin/seid
 
 mkdir ~/bkup_cosmovisor_sei
-echo ulimit -n unlimited>seid_start_with_cosmovisor.sh
+echo ulimit -n 1000000>seid_start_with_cosmovisor.sh
 echo UNSAFE_SKIP_BACKUP=true DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start --home ~/.sei>>seid_start_with_cosmovisor.sh
 chmod +x seid_start_with_cosmovisor.sh
 
