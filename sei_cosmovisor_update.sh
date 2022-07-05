@@ -1,5 +1,5 @@
 ﻿#!/bin/bash
-cd $HOME || { echo "$HOME dizinine girilemiyor"; sleep 10; exit 13;}
+cd $HOME || { echo "$HOME Unable to enter directory"; sleep 10; exit 13;}
 
 DIR="$HOME/.sei/cosmovisor"
 if [ -d "$DIR" ]; then
@@ -87,7 +87,7 @@ make install
 #go build -o build/seid ./cmd/seid
 # Checkout the binary for 1.0.xbeta
 # if not right version exit script.
-cd $HOME
+cd $HOME || { echo "$HOME Unable to enter directory"; sleep 10; exit 13;}
 #create cosmovisor upgrade directory
 mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
 #copy new seid version correct upgrade cosmovisor directory
@@ -102,7 +102,7 @@ else
 			echo $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid version $SEIDVER
 		else
     	echo -e "\e[1m\e[31m2. Error version not match $SEIDVER \e[0m"
-    	echo -e "\e[1m\e[31m2. please check $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrades/bin version file \e[0m"
+    	echo -e "\e[1m\e[31m2. please check $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin version file \e[0m"
     	read -s -n 1 -p "Press any key to EXIT . . ."
 			exit 13
 		fi
@@ -120,6 +120,5 @@ rm -rf /usr/local/bin/seid
 ln -s $HOME/.sei/cosmovisor/current/bin/seid /usr/local/bin/seid
 
 mkdir ~/bkup_cosmovisor_sei
-echo ulimit -n unlimited>seid_start_with_cosmovisor.sh
+echo ulimit -n 1000000>seid_start_with_cosmovisor.sh
 echo UNSAFE_SKIP_BACKUP=true DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start --home ~/.sei>>seid_start_with_cosmovisor.sh
-
