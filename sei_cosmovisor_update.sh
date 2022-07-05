@@ -1,4 +1,5 @@
-﻿if [ ! $1 ]; then
+﻿#!/bin/bash
+if [ ! $1 ]; then
    read -p "Enter the version you want to add to cosmovisor.(for example me:1.0.6beta)" SEIDVER
 else
    echo "Is $1 the version you want to install? [Y/N]"
@@ -131,7 +132,7 @@ cp $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid $DAEMON_HOME/cos
 kill $(pidof cosmovisor)
 
 #remove execute file from local/bin
-#rm -rf /usr/local/bin/seid
+rm -rf /usr/local/bin/seid
 
 #add solid link current seid execute to local/bin
 ln -s $HOME/.sei/cosmovisor/current/bin/seid /usr/local/bin/seid
