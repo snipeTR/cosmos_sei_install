@@ -1,13 +1,14 @@
 ﻿if [ ! $1 ]; then
    read -p "Enter the version you want to add to cosmovisor.(for example me:1.0.6beta)" SEIDVER
 else
-   echo "Is $1 the version you want to install?"
+   echo "Is $1 the version you want to install? [Y/N]"
    read answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
       echo Yes
       SEIDVER=$1
     else
       echo No
+      sleep 3
     exit 13
     fi
 fi
@@ -31,7 +32,7 @@ echo "export VISORVER=v1.1.0" >> $HOME/.bash_profile
 fi
 source $HOME/.bash_profile
 
-echo test variable
+echo '==============VARIABLE  CONTROL=================='
 echo NODENAME:$NODENAME
 echo WALLET:$WALLET
 echo CHAIN_ID:$CHAIN_ID
@@ -40,15 +41,19 @@ echo DAEMON_NAME:$DAEMON_NAME
 echo DAEMON_HOME:$DAEMON_HOME
 echo SEIDVER:$SEIDVER
 echo VISORVER:$VISORVER
-
-echo '================================================='
-echo 'Node name: ' $NODENAME
-echo 'wallet name: ' $WALLET
-echo 'Chain ismi: ' $CHAIN_ID
 echo '================================================='
 echo "."
-
-read -s -n 1 -p "Are the above values correct? If true, press a key. If false, exit with ctrl+c"
+   echo "\e[1m\e[35mPlease check the accuracy of the information \e[1m\e[36mCAREFULLY.\e[0m"
+   echo "\e[1m\e[31mAre the above values correct? [Y/N]\e[0m"
+   sleep 2
+   read answer
+    if [ "$answer" != "${answer#[Yy]}" ] ;then
+      echo Yes
+    else
+      echo No
+      sleep 3
+    exit 13
+    fi
 
 # update
 sudo apt update && sudo apt upgrade -y
