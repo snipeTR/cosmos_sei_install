@@ -1,5 +1,5 @@
 #!/bin/bash
-#v0.1beta
+#v0.2beta
 #snipeTR 2022 dscrd:snipeTR#8374
 #karboran 2022 dscrd:karboran#2719
 #Apache License Version 2.0
@@ -164,10 +164,6 @@ seid config keyring-backend file
 # init
 seid init "$NODENAME" --chain-id "$CHAIN_ID"
 
-# download genesis and addrbook
-#wget -qO "$HOME"/.sei/config/genesis.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/$CHAIN_ID/genesis.json"
-#wget -qO "$HOME"/.sei/config/addrbook.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/$CHAIN_ID/addrbook.json"
-
 #Tuning config.toml
 CONFIG_PATH="$HOME/.sei/config/config.toml"
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -251,7 +247,6 @@ _address2_port=9091
 #external_address=$(wget -qO- eth0.me)
 #sed -i.bak -e "s/^external_address *=.*/external_address = \"$external_address:$_external_port\"/" $HOME/.sei/config/config.toml
 
-sleep 1
 # reset
 seid unsafe-reset-all
 
@@ -342,7 +337,7 @@ else
 fi
 #################################################
 
-seid_on_cosmovisor () {
+Seid_On_Cosmovisor () {
    cd $HOME || { echo "$HOME dizinine girilemiyor"; sleep 10; exit 13;}
    #remove old sei-chain directory
    rm -rf sei-chain
@@ -384,7 +379,7 @@ seid_on_cosmovisor () {
 #################################################
 #set version
 SEIDVER=1.0.3beta
-seid_on_cosmovisor $SEIDVER
+Seid_On_Cosmovisor $SEIDVER
 #################################################
 
 
@@ -392,14 +387,14 @@ seid_on_cosmovisor $SEIDVER
 #################################################
 #set version
 SEIDVER=1.0.4beta
-seid_on_cosmovisor $SEIDVER
+Seid_On_Cosmovisor $SEIDVER
 #################################################
 
 
 # Checkout the binary for 1.0.5beta
 #################################################
 SEIDVER=1.0.5beta
-seid_on_cosmovisor $SEIDVER
+Seid_On_Cosmovisor $SEIDVER
 #possible seid1.0.5beta or cosmovisor bug and create alternative folder
 mkdir -p "$DAEMON_HOME"/cosmovisor/upgrades/"$SEIDVER"/bin
 cp "$DAEMON_HOME"/cosmovisor/upgrades/"$SEIDVER"%20upgrade/bin/seid "$DAEMON_HOME"/cosmovisor/upgrades/"$SEIDVER"/bin
@@ -410,7 +405,7 @@ cp "$DAEMON_HOME"/cosmovisor/upgrades/"$SEIDVER"%20upgrade/bin/seid "$DAEMON_HOM
 #################################################
 #set version
 SEIDVER=1.0.6beta
-seid_on_cosmovisor $SEIDVER
+Seid_On_Cosmovisor $SEIDVER
 #################################################
 
 cd $HOME || { echo "$HOME dizinine girilemiyor"; sleep 10; exit 13;}
