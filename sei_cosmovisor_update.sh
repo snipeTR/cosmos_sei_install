@@ -1,4 +1,21 @@
 ﻿#!/bin/bash
+cd $HOME || { echo "$HOME dizinine girilemiyor"; sleep 10; exit 13;}
+
+DIR="$HOME/.sei/cosmovisor"
+if [ -d "$DIR" ]; then
+  ### Take action if $DIR exists ###
+  clear
+  echo ----------------------------------------------
+  tree ~/.sei/cosmovisor
+  echo ----------------------------------------------
+else
+  ###  Control will jump here if $DIR does NOT exists ###
+  echo "COSMOVISOR application has not been installed on this server before."
+  echo "You cannot install SEI-CHAIN with this script."
+  echo "Please run 'cosmos_sei_installer.sh'."
+  exit 1
+fi
+
 if [ ! $1 ]; then
    read -p "Enter the version you want to add to cosmovisor.(for example me:1.0.6beta)" SEIDVER
 else
@@ -8,7 +25,7 @@ else
       echo Yes
       SEIDVER=$1
     else
-      echo No
+    echo your answer no, exiting script.
       sleep 3
     exit 13
     fi
@@ -46,7 +63,6 @@ echo '================================================='
 echo "."
    echo "\e[1m\e[35mPlease check the accuracy of the information \e[1m\e[36mCAREFULLY.\e[0m"
    echo "\e[1m\e[31mAre the above values correct? [Y/N]\e[0m"
-   sleep 2
    read answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
       echo Yes
@@ -59,40 +75,6 @@ echo "."
 # update
 sudo apt update && sudo apt upgrade -y
 
-#sudo systemctl enable seid
-#sudo systemctl restart seid
-
-#cosmovisor install
-
-#~/.sei/cosmovisor
-#├── current -> genesis or upgrades/<name>
-#├── genesis
-#│   └── bin
-#│       └── seid
-#├── upgrades
-#│   └── 1.0.3beta
-#│       ├── bin
-#│       │   └── seid
-#│       └── upgrade-info.json
-#├── upgrades
-#│   └── 1.0.4beta
-#│       ├── bin
-#│       │   └── seid
-#│        └── upgrade-info.json
-#└── upgrades
-#    └── 1.0.5beta%20upgrade
-#        ├── bin
-#        │   └── seid
-#        └── upgrade-info.json
-#└── upgrades
-#    └── 1.0.6beta%20upgrade
-#        ├── bin
-#        │   └── seid
-#        └── upgrade-info.json
-
-# Checkout the binary for 1.0.5beta
-#SEIDVER=1.0.6beta
-cd $HOME
 #remove old sei-chain directory
 rm -rf sei-chain
 #clone sei-chain
@@ -102,22 +84,22 @@ git fetch --tags -f
 git checkout $SEIDVER
 # Build the new version
 make install
-go build -o build/seid ./cmd/seid
+#go build -o build/seid ./cmd/seid
 # Checkout the binary for 1.0.xbeta
 # if not right version exit script.
 cd $HOME
 #create cosmovisor upgrade directory
-mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
 #copy new seid version correct upgrade cosmovisor directory
-cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin
+cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
 if [ ! -f "$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid" ]; then
     echo "$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid FILE NOT EXIST"
     read -s -n 1 -p "Press any key to EXIT . . ."
     exit 13
 else
-		SEIDBUILDVER=$($DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid version)
+		SEIDBUILDVER=$($DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid version)
 		if [ "$SEIDBUILDVER" == "$SEIDVER" ]; then
-			echo $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid version $SEIDVER
+			echo $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid version $SEIDVER
 		else
     	echo -e "\e[1m\e[31m2. Error version not match $SEIDVER \e[0m"
     	echo -e "\e[1m\e[31m2. please check $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrades/bin version file \e[0m"
@@ -125,8 +107,8 @@ else
 			exit 13
 		fi
 fi
-mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
-cp $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin
+cp $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER%20upgrade/bin
 
 #stop cosmovisor
 kill $(pidof cosmovisor)
