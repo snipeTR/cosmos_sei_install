@@ -138,5 +138,6 @@ rm -rf /usr/local/bin/seid
 ln -s $HOME/.sei/cosmovisor/current/bin/seid /usr/local/bin/seid
 
 mkdir ~/bkup_cosmovisor_sei
-UNSAFE_SKIP_BACKUP=true DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start --home ~/.sei
+echo ulimit -n unlimited>seid_start_with_cosmovisor.sh
+echo UNSAFE_SKIP_BACKUP=true DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start --home ~/.sei>>seid_start_with_cosmovisor.sh
 
