@@ -1,4 +1,5 @@
 ﻿#!/bin/bash
+
 #wget -O sei_cosmovisor_install.sh https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_install.sh && chmod +x sei_cosmovisor_install.sh
 echo tnx for kj89
 sleep 1
