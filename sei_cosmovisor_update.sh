@@ -117,16 +117,27 @@ echo -e "\e[1m\e[32m5. Copying the seid executable to the required folder ... \e
 mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
 cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
 
-# check right version number.
+# check right seid version number on upgrades directory.
 if [ ! -f "$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid" ]; then
     echo -e "$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid \e[1m\e[31mFILE NOT EXIST\e[0m"
+    echo -e "\e[1m\e[31m Upgrade fail \e[0m"
     echo -e "\e[1m\e[31m ERROR ERROR ERROR ERROR \e[0m"
     read -s -n 1 -p "Press any key to EXIT . . ."
     exit 13
 else
-		SEIDBUILDVER=$($DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid version)
+		local SEIDBUILDVER=$($DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid version)
 		if [ "$SEIDBUILDVER" == "$SEIDVER" ]; then
 			echo $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin/seid version $SEIDVER
+			echo -e "The seid binary with version number \e[1m\e[31m$SEIDVER\e[0m has been copied to the required folder."
+			
+			pkill --signal 2 cosmovisor
+			
+			if [ ! bkup_cosmovisor_sei ]; then mkdir ~/bkup_cosmovisor_sei ;fi 
+			if [ ! seid_start_with_cosmovisor.sh ]; then rm -rf seid_start_with_cosmovisor.sh; fi 
+			
+      echo ulimit -n 1000000 >seid_start_with_cosmovisor.sh
+      echo UNSAFE_SKIP_BACKUP=true DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start init ~/.sei>>seid_start_with_cosmovisor.sh
+      chmod +x seid_start_with_cosmovisor.sh
 		else
     	echo -e "\e[1m\e[31m Error version not match $SEIDVER \e[0m"
     	echo -e "\e[1m\e[31m please check \e[1m\e[31m$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin\e[1m\e[31m version file \e[0m"

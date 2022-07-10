@@ -1,8 +1,11 @@
 ﻿#!/bin/bash
-
 echo tnx for kj89
 sleep 1
 cd $HOME
+#update script download
+if [sei_cosmovisor_update.sh]; then rm -rf sei_cosmovisor_update.sh; fi
+wget -b -O sei_cosmovisor_update.sh https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_update.sh && chmod +x sei_cosmovisor_update.sh
+
 if [ .bash_profile ]
 	then 
 		if [ .bsh_profil_org ]
@@ -251,7 +254,7 @@ ln -s "$HOME"/.sei/cosmovisor/current/bin/seid /usr/local/bin/seid
 
 mkdir ~/bkup_cosmovisor_sei
 echo ulimit -n 1000000 >seid_start_with_cosmovisor.sh
-echo UNSAFE_SKIP_BACKUP=true DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start --home ~/.sei>>seid_start_with_cosmovisor.sh
+echo UNSAFE_SKIP_BACKUP=true DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start init ~/.sei>>seid_start_with_cosmovisor.sh
 chmod +x seid_start_with_cosmovisor.sh
 
 
