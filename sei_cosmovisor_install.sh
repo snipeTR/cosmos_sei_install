@@ -1,7 +1,7 @@
 ﻿#!/bin/bash
 echo tnx for kj89
 sleep 1
-cd $HOME
+cd $HOME || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 #update script download
 if [sei_cosmovisor_update.sh]; then rm -rf sei_cosmovisor_update.sh; fi
 wget -b -O sei_cosmovisor_update.sh https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_update.sh && chmod +x sei_cosmovisor_update.sh
@@ -94,7 +94,7 @@ sudo apt install curl build-essential git wget jq make gcc tmux tree mc software
 # install go function
 installgo () 
   {
-	  cd $HOME
+	  cd $HOME || { echo "Unable to enter $HOME directory";}
 	  ver=$1
 	  wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz"
 	  sudo rm -rf /usr/local/go
@@ -122,9 +122,10 @@ else
 fi
 
 
-echo -e "\e[1m\e[32m3. Downloading and building binaries... \e[0m" && sleep 1
+
 # download binary
-cd $HOME
+echo -e "\e[1m\e[32m3. Downloading and building binaries... \e[0m" && sleep 1
+cd $HOME || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 #remove old sei-chain directory
 DIR="sei-chain"
 if [ -d "$DIR" ]; then
@@ -213,7 +214,7 @@ echo sudo systemctl restart seid
 
 echo -e "\e[1m\e[32m5. installing Cosmovisor... \e[0m" && sleep 1
 
-cd $HOME
+cd $HOME || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 rm -rf ./cosmos-sdk
 git clone --depth 1 --branch main https://github.com/cosmos/cosmos-sdk
 cd cosmos-sdk
@@ -236,7 +237,7 @@ else
       	read -r -s -n 1 -p "Press any key to EXIT . . ."
     	exit 13
 fi
-cd $HOME || { echo "$HOME dizinine girilemiyor"; sleep 10; exit 13;}
+cd $HOME || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 
 #install helpsei command
 sudo wget https://raw.githubusercontent.com/snipeTR/sei_help/main/sei_help.sh && chmod +x ./sei_help.sh &&sudo mv ./sei_help.sh /usr/local/bin/helpsei

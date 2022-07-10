@@ -1,6 +1,6 @@
 ﻿#!/bin/bash
 
-cd $HOME || { echo "$HOME Unable to enter directory"; sleep 10; exit 13;}
+cd $HOME || { echo "$HOME Unable to enter directory"; sleep 1; exit 13;}
 echo tnx for \e[1m\e[32mkj89\e[0m
 echo -e "\e[1m\e[32m0. cosmovisor is detected.... \e[0m" && sleep 1
 DIR="$HOME/.sei/cosmovisor"
@@ -39,7 +39,7 @@ read -rsn1 answer
    exit 13
    fi
 
-cd $HOME || { echo "$HOME Unable to enter directory"; sleep 10; exit 13;}
+cd $HOME || { echo "$HOME Unable to enter directory"; sleep 1; exit 13;}
 
 source $HOME/.bash_profile
 
