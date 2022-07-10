@@ -53,7 +53,7 @@ if [ $WALLET ]; then
 fi
 
 
-echo "export SEI_CHAIN_ID=atlantic-1" >> $HOME/.bash_profile
+echo "export SEI_CHAIN_ID=atlantis-1" >> $HOME/.bash_profile
 echo "export SEI_PORT=${SEI_PORT}" >> $HOME/.bash_profile
 
 echo 'export UNSAFE_SKIP_BACKUP=true' >> $HOME/.bash_profile
