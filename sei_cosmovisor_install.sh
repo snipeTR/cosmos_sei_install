@@ -1,69 +1,70 @@
-﻿#wget -O sei_cosmovisor_install.sh https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_install.sh && chmod +x sei_cosmovisor_install.sh
+﻿#!/bin/bash
+#wget -O sei_cosmovisor_install.sh https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_install.sh && chmod +x sei_cosmovisor_install.sh
 echo tnx for kj89
 sleep 1
-cd $HOME || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
+cd "$HOME" || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 #update script download
-if [ sei_cosmovisor_update.sh ]; then rm -rf sei_cosmovisor_update.sh; fi
+if [ -f sei_cosmovisor_update.sh ]; then rm -rf sei_cosmovisor_update.sh; fi
 wget -b -O sei_cosmovisor_update.sh https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_update.sh && chmod +x sei_cosmovisor_update.sh
 
-if [ .bash_profile ]
+if [ -f .bash_profile ]
 	then 
-		if [ .bsh_profil_org ]
+		if [ -f .bsh_profil_org ]
 			then cp .bash_profile .bsh_profil_org
 		fi
 fi
-source $HOME/.bash_profile
+source "$HOME"/.bash_profile
 
 # delete old line for dublicate.
 sed -i.org '/DAEMON_DATA_BACKUP_DIR\|DAEMON_RESTART_AFTER_UPGRADE\|DAEMON_NAME\|DAEMON_HOME\|UNSAFE_SKIP_BACKUP\|SEI_PORT\|SEI_CHAIN_ID\|WALLET\|NODENAME/d' "$HOME/.bash_profile"
 
 # set vars
-if [ $NODENAME ]; then 
+if [ "$NODENAME" ]; then 
 	echo -e "Node name \e[1m\e[32mseting before\e[0m, NODE NAME..:\e[1m\e[32m$NODENAME\e[0m"
   echo -e "Press ANY KEY to use the \e[1m\e[32msame node name\e[0m."
   echo -e "Press [Y/y] to change \e[1m\e[32m$NODENAME\e[0m."
    read -rsn1 answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
-      read -p "Enter node name: " NODENAME
-      echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
+      read -p -r "Enter node name: " NODENAME
+      echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
     else
-      echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
+      echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
     fi
   else
-  read -p "Enter node name: " NODENAME
-  echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
+  read -p -r "Enter node name: " NODENAME
+  echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
 fi
 
 
-if [ ! $SEI_PORT ]; then SEI_PORT=12; fi
+if [ ! "$SEI_PORT" ]; then SEI_PORT=12; fi
 
-if [ $WALLET ]; then 
+if [ "$WALLET" ]; then 
 	echo -e "Wallet name \e[1m\e[32mseting before\e[0m, WALLET NAME..:\e[1m\e[32m$WALLET\e[0m"
   echo -e "Press ANY KEY to use the \e[1m\e[32msame wallet name\e[0m."
   echo -e "Press [Y/y] to change \e[1m\e[32m$WALLET\e[0m."
    read -rsn1 answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
-      read -p "Enter wallet name: " WALLET
-      echo 'export WALLET='$WALLET >> $HOME/.bash_profile
+      read -p -r "Enter wallet name: " WALLET
+      echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
     else
-      echo 'export WALLET='$WALLET >> $HOME/.bash_profile
+      echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
     fi
   else
-  read -p "Enter wallet name: " WALLET
-  echo 'export WALLET='$WALLET >> $HOME/.bash_profile
+  read -p -r "Enter wallet name: " WALLET
+  echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
 fi
 
 
-echo "export SEI_CHAIN_ID=atlantic-1" >> $HOME/.bash_profile
-echo "export SEI_PORT=${SEI_PORT}" >> $HOME/.bash_profile
+echo "export SEI_CHAIN_ID=atlantic-1" >> "$HOME"/.bash_profile
+echo "export SEI_PORT=${SEI_PORT}" >> "$HOME"/.bash_profile
 
-echo 'export UNSAFE_SKIP_BACKUP=true' >> $HOME/.bash_profile
-echo 'export DAEMON_HOME=~/.sei' >> $HOME/.bash_profile
-echo 'export DAEMON_NAME=seid' >> $HOME/.bash_profile
-echo 'export DAEMON_RESTART_AFTER_UPGRADE=true' >> $HOME/.bash_profile
-echo 'export DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei' >> $HOME/.bash_profile
+echo "export UNSAFE_SKIP_BACKUP=true" >> "$HOME"/.bash_profile
+echo "export DAEMON_HOME=~/.sei" >> "$HOME"/.bash_profile
+echo "export DAEMON_NAME=seid" >> "$HOME"/.bash_profile
+echo "export DAEMON_RESTART_AFTER_UPGRADE=true" >> "$HOME"/.bash_profile
+echo "export DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei" >> "$HOME"/.bash_profile
 
-source $HOME/.bash_profile
+source "$HOME"/.bash_profile
 
 echo '================================================='
 echo -e "Your node name(moniker): \e[1m\e[32m$NODENAME\e[0m"
@@ -94,18 +95,18 @@ sudo apt install curl build-essential git wget jq make gcc tmux tree mc software
 # install go function
 installgo () 
   {
-	  cd $HOME || { echo "Unable to enter $HOME directory";}
-	  ver=$1
+	  cd "$HOME" || { echo "Unable to enter $HOME directory";}
+	  ver="$1"
 	  wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz"
 	  sudo rm -rf /usr/local/go
 	  sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz"
 	  rm "go$ver.linux-amd64.tar.gz"
 	  sed -i.org '/GOROOT\|GOPATH\|GO111MODULE/d' "$HOME/.bash_profile"
 	  echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
-	  echo 'export GOROOT=/usr/local/go' >> "$HOME"/.bash_profile
-	  echo 'export GOPATH=$HOME/go' >> "$HOME"/.bash_profile
-	  echo 'export GO111MODULE=on' >> "$HOME"/.bash_profile
-	  source ~/.bash_profile
+	  echo "export GOROOT=/usr/local/go" >> "$HOME"/.bash_profile
+	  echo "export GOPATH=$HOME/go" >> "$HOME"/.bash_profile
+	  echo "export GO111MODULE=on" >> "$HOME"/.bash_profile
+	  source "$HOME"/.bash_profile
 	  echo -e "\e[1m\e[32m Go installation complate... \e[0m" && sleep 2
 	}
 
@@ -115,7 +116,7 @@ checkgover=$(go version)
 if [ "${checkgover:13:4}" == "${ver:0:4}" ]; then 
 	#no need install
 	echo "No need to install go-lang, versions are compatible."
-	echo "requested version "$ver", installed version "${checkgover:13:6}""
+	echo "requested version $ver, installed version ${checkgover:13:6}"
 else
   #installation required
   installgo "$ver"
@@ -125,7 +126,7 @@ fi
 
 # download binary
 echo -e "\e[1m\e[32m3. Downloading and building binaries... \e[0m" && sleep 1
-cd $HOME || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
+cd "$HOME" || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 #remove old sei-chain directory
 DIR="sei-chain"
 if [ -d "$DIR" ]; then
@@ -134,25 +135,25 @@ if [ -d "$DIR" ]; then
   sudo rm -rf sei-chain
 fi
 git clone https://github.com/sei-protocol/sei-chain.git
-cd sei-chain
+cd sei-chain || { echo "Unable to enter sei-chain directory"; sleep 1; exit 13;}
 git checkout 1.0.6beta
 make install 
 sudo cp ~/go/bin/seid /usr/local/bin/seid
 
 # config
-seid config chain-id $SEI_CHAIN_ID
+seid config chain-id "$SEI_CHAIN_ID"
 seid config keyring-backend test
-seid config node tcp://localhost:${SEI_PORT}657
+seid config node tcp://localhost:"${SEI_PORT}657"
 
 # init
-seid init $NODENAME --chain-id $SEI_CHAIN_ID
+seid init "$NODENAME" --chain-id "$SEI_CHAIN_ID"
 
 # download genesis and addrbook
 
 
 # set custom ports
-sed -i.bak -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.0.0.1:${SEI_PORT}658\"%; s%^laddr = \"tcp://127.0.0.1:26657\"%laddr = \"tcp://127.0.0.1:${SEI_PORT}657\"%; s%^pprof_laddr = \"localhost:6060\"%pprof_laddr = \"localhost:${SEI_PORT}060\"%; s%^laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:${SEI_PORT}656\"%; s%^prometheus_listen_addr = \":26660\"%prometheus_listen_addr = \":${SEI_PORT}660\"%" $HOME/.sei/config/config.toml
-sed -i.bak -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:${SEI_PORT}317\"%; s%^address = \":8080\"%address = \":${SEI_PORT}080\"%; s%^address = \"0.0.0.0:9090\"%address = \"0.0.0.0:${SEI_PORT}090\"%; s%^address = \"0.0.0.0:9091\"%address = \"0.0.0.0:${SEI_PORT}091\"%" $HOME/.sei/config/app.toml
+sed -i.bak -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.0.0.1:${SEI_PORT}658\"%; s%^laddr = \"tcp://127.0.0.1:26657\"%laddr = \"tcp://127.0.0.1:${SEI_PORT}657\"%; s%^pprof_laddr = \"localhost:6060\"%pprof_laddr = \"localhost:${SEI_PORT}060\"%; s%^laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:${SEI_PORT}656\"%; s%^prometheus_listen_addr = \":26660\"%prometheus_listen_addr = \":${SEI_PORT}660\"%" "$HOME"/.sei/config/config.toml
+sed -i.bak -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:${SEI_PORT}317\"%; s%^address = \":8080\"%address = \":${SEI_PORT}080\"%; s%^address = \"0.0.0.0:9090\"%address = \"0.0.0.0:${SEI_PORT}090\"%; s%^address = \"0.0.0.0:9091\"%address = \"0.0.0.0:${SEI_PORT}091\"%" "$HOME"/.sei/config/app.toml
 
 #port_description file
 echo -e "\e[1m\e[32m create port_description file port_description.txt \e[0m" && sleep 1
@@ -168,26 +169,26 @@ echo address = :${SEI_PORT}091 >>port_description_sei.txt
 
 # disable indexing
 indexer="null"
-sed -i -e "s/^indexer *=.*/indexer = \"$indexer\"/" $HOME/.sei/config/config.toml
+sed -i -e "s/^indexer *=.*/indexer = \"$indexer\"/" "$HOME"/.sei/config/config.toml
 
 # config pruning
 pruning="custom"
 pruning_keep_recent="100"
 pruning_keep_every="0"
 pruning_interval="50"
-sed -i -e "s/^pruning *=.*/pruning = \"$pruning\"/" $HOME/.sei/config/app.toml
-sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"$pruning_keep_recent\"/" $HOME/.sei/config/app.toml
-sed -i -e "s/^pruning-keep-every *=.*/pruning-keep-every = \"$pruning_keep_every\"/" $HOME/.sei/config/app.toml
-sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $HOME/.sei/config/app.toml
+sed -i -e "s/^pruning *=.*/pruning = \"$pruning\"/" "$HOME"/.sei/config/app.toml
+sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"$pruning_keep_recent\"/" "$HOME"/.sei/config/app.toml
+sed -i -e "s/^pruning-keep-every *=.*/pruning-keep-every = \"$pruning_keep_every\"/" "$HOME"/.sei/config/app.toml
+sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" "$HOME"/.sei/config/app.toml
 
 # set minimum gas price (developers don't want 0usei min gasfee.)
-sed -i -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"10usei\"/" $HOME/.sei/config/app.toml
+sed -i -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"10usei\"/" "$HOME"/.sei/config/app.toml
 
 # enable prometheus
-sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.sei/config/config.toml
+sed -i -e "s/prometheus = false/prometheus = true/" "$HOME"/.sei/config/config.toml
 
 # reset
-seid tendermint unsafe-reset-all --home $HOME/.sei
+seid tendermint unsafe-reset-all --home "$HOME"/.sei
 
 echo -e "\e[1m\e[32m4. Starting service... \e[0m" && sleep 1
 # create service
@@ -197,8 +198,8 @@ Description=sei
 After=network-online.target
 
 [Service]
-User=$USER
-ExecStart=$(which seid) start --home $HOME/.sei
+User="$USER"
+ExecStart=$(which seid) start --home "$HOME"/.sei
 Restart=on-failure
 RestartSec=3
 LimitNOFILE=65535
@@ -214,10 +215,10 @@ echo sudo systemctl restart seid
 
 echo -e "\e[1m\e[32m5. installing Cosmovisor... \e[0m" && sleep 1
 
-cd $HOME || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
+cd "$HOME" || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 rm -rf ./cosmos-sdk
 git clone --depth 1 --branch main https://github.com/cosmos/cosmos-sdk
-cd cosmos-sdk
+cd cosmos-sdk || { echo "Unable to enter cosmos-sdk directory"; sleep 1; exit 13;}
 make cosmovisor
 
 #check binary cosmovisor
@@ -237,7 +238,7 @@ else
       	read -r -s -n 1 -p "Press any key to EXIT . . ."
     	exit 13
 fi
-cd $HOME || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
+cd "$HOME" || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 
 #install helpsei command
 sudo wget https://raw.githubusercontent.com/snipeTR/sei_help/main/sei_help.sh && chmod +x ./sei_help.sh &&sudo mv ./sei_help.sh /usr/local/bin/helpsei
