@@ -1,4 +1,5 @@
-﻿echo tnx for kj89
+﻿#wget -O sei_cosmovisor_install.sh https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_install.sh && chmod +x sei_cosmovisor_install.sh
+echo tnx for kj89
 sleep 1
 cd $HOME || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 #update script download
@@ -242,6 +243,7 @@ cd $HOME || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 sudo wget https://raw.githubusercontent.com/snipeTR/sei_help/main/sei_help.sh && chmod +x ./sei_help.sh &&sudo mv ./sei_help.sh /usr/local/bin/helpsei
 
 #run first cosmovisor for $HOME/.sei/cosmovisor/current/bin/seid file link create.
+cp "./cosmos-sdk/cosmovisor/cosmovisor" "/usr/local/bin/"
 DAEMON_HOME=$HOME/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true ./cosmos-sdk/cosmovisor/cosmovisor run start
 sleep 3
 kill "$(pidof cosmovisor)"
