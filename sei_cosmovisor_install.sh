@@ -131,8 +131,8 @@ fi
 
 if [ "${checkgover:13:4}" == "${ver:0:4}" ]; then 
 	#NO NEED install go
-	echo "No need to install go-lang, versions are compatible."
-	echo "requested version $ver, installed version ${checkgover:13:6}"
+	echo -e "\e[1m\e[32mNo need to install go-lang\e[0m, versions are compatible."
+	echo -e "\e[1m\e[32mrequested\e[0m version $ver, \e[1m\e[32minstalled\e[0m version ${checkgover:13:6}"
 else
   #installation required
   installgo "$ver"
@@ -223,7 +223,7 @@ Description=sei
 After=network-online.target
 
 [Service]
-User="$USER"
+User=$USER
 ExecStart=$(which seid) start --home "$HOME"/.sei
 Restart=on-failure
 RestartSec=3
@@ -289,3 +289,34 @@ chmod +x seid_start_with_cosmovisor.sh
 echo '=============== SETUP FINISHED ==================='
 echo -e 'To check logs: \e[1m\e[32m."/"seid_start_with_cosmovisor.sh\e[0m'
 echo -e "To check sync status: \e[1m\e[32mcurl -s localhost:${SEI_PORT}657/status | jq .result.sync_info\e[0m"
+echo " "
+echo " "
+echo " "
+echo -e "Do you want to create wallets? [Y/N]"
+   read -rsn1 answer
+    if [ "$answer" != "${answer#[Yy]}" ] ;then
+    	   echo -e "press \e[1m\e[32m[Y]\e[0m for \e[1m\e[34mnew wallet\e[0m. Press \e[1m\e[32many key\e[0m for \e[1m\e[34mrecover wallet\e[0m with mnemonic."
+         read -rsn1 aanswer
+         if [ "$aanswer" != "${aanswer#[Yy]}" ] ;then
+         	  if [ $(seid keys list --output json | jq .[0].name) == "\"$WALLET"\" ]; then 
+         		  echo -e "The wallet named..:\e[1m\e[34m$WALLET\e[0m is already installed on your system,"
+         		  read -p "Enter new wallet name: " WALLETT
+         		  seid keys add $WALLETT
+         	  else
+         	    seid keys add $WALLET
+         	  fi
+         else
+           echo -e "\e[1m\e[32mPlease enter the recovery words for wallet.\e[0m wallet name..: \e[1m\e[35m$WALLET.\e[0m"
+           RET=987
+           until [ ${RET} -eq 0 ]; do
+              if [ ! ${RET} -eq 987 ]; then echo "\e[1m\e[31mYour recovery words are incorrect, please re-enter carefully.\e[0m"; fi
+              seid keys add $WALLET --recovery
+              RET=$?
+           done
+         fi
+    else
+      echo No
+      sleep 3
+    exit 13
+    fi
+
