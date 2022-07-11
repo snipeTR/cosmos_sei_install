@@ -1,12 +1,13 @@
-﻿#!/bin/bash
-
+﻿
+#!/bin/bash
 #wget -O sei_cosmovisor_install.sh https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_install.sh && chmod +x sei_cosmovisor_install.sh
 echo tnx for kj89
+	
 sleep 1
 cd "$HOME" || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 #update script download
 if [ -f sei_cosmovisor_update.sh ]; then rm -rf sei_cosmovisor_update.sh; fi
-wget -b -O sei_cosmovisor_update.sh https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_update.sh && chmod +x sei_cosmovisor_update.sh
+wget -O sei_cosmovisor_update.sh https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_update.sh && chmod +x sei_cosmovisor_update.sh
 
 if [ -f .bash_profile ]
 	then 
@@ -26,13 +27,13 @@ if [ "$NODENAME" ]; then
   echo -e "Press [Y/y] to change \e[1m\e[32m$NODENAME\e[0m."
    read -rsn1 answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
-      read -p -r "Enter node name: " NODENAME
+      read -p "Enter node name: " NODENAME
       echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
     else
       echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
     fi
   else
-  read -p -r "Enter node name: " NODENAME
+  read -p "Enter node name: " NODENAME
   echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
 fi
 
@@ -45,13 +46,13 @@ if [ "$WALLET" ]; then
   echo -e "Press [Y/y] to change \e[1m\e[32m$WALLET\e[0m."
    read -rsn1 answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
-      read -p -r "Enter wallet name: " WALLET
+      read -p "Enter wallet name: " WALLET
       echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
     else
       echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
     fi
   else
-  read -p -r "Enter wallet name: " WALLET
+  read -p "Enter wallet name: " WALLET
   echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
 fi
 
@@ -157,16 +158,20 @@ sed -i.bak -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.
 sed -i.bak -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:${SEI_PORT}317\"%; s%^address = \":8080\"%address = \":${SEI_PORT}080\"%; s%^address = \"0.0.0.0:9090\"%address = \"0.0.0.0:${SEI_PORT}090\"%; s%^address = \"0.0.0.0:9091\"%address = \"0.0.0.0:${SEI_PORT}091\"%" "$HOME"/.sei/config/app.toml
 
 #port_description file
+sudo rm -rf usr/local/bin/seiport
 echo -e "\e[1m\e[32m create port_description file port_description.txt \e[0m" && sleep 1
-echo proxy_app = :${SEI_PORT}658 >port_description_sei.txt
-echo laddr = :${SEI_PORT}657 >>port_description_sei.txt
-echo pprof_laddr = :${SEI_PORT}060 >>port_description_sei.txt
-echo laddr = :${SEI_PORT}656 >>port_description_sei.txt
-echo prometheus_listen_addr = :${SEI_PORT}660 >>port_description_sei.txt
-echo address = :${SEI_PORT}317 >>port_description_sei.txt
-echo address = :${SEI_PORT}080 >>port_description_sei.txt
-echo address = :${SEI_PORT}090 >>port_description_sei.txt
-echo address = :${SEI_PORT}091 >>port_description_sei.txt
+echo echo curl -s localhost:${SEI_PORT}657/status >seiport
+echo echo proxy_app = :${SEI_PORT}658 >>seiport
+echo echo laddr = :${SEI_PORT}657 >>seiport
+echo echo pprof_laddr = :${SEI_PORT}060 >>seiport
+echo echo laddr = :${SEI_PORT}656 >>seiport
+echo echo prometheus_listen_addr = :${SEI_PORT}660 >>seiport
+echo echo address = :${SEI_PORT}317 >>seiport
+echo echo address = :${SEI_PORT}080 >>seiport
+echo echo address = :${SEI_PORT}090 >>seiport
+echo echo address = :${SEI_PORT}091 >>seiport
+chmod +x ./seiport
+sudo mv ./seiport /usr/local/bin
 
 # disable indexing
 indexer="null"
@@ -245,16 +250,16 @@ cd "$HOME" || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 sudo wget https://raw.githubusercontent.com/snipeTR/sei_help/main/sei_help.sh && chmod +x ./sei_help.sh &&sudo mv ./sei_help.sh /usr/local/bin/helpsei
 
 #run first cosmovisor for $HOME/.sei/cosmovisor/current/bin/seid file link create.
-cp "./cosmos-sdk/cosmovisor/cosmovisor" "/usr/local/bin/"
+sudo cp "./cosmos-sdk/cosmovisor/cosmovisor" "/usr/local/bin/"
 DAEMON_HOME=$HOME/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true ./cosmos-sdk/cosmovisor/cosmovisor run start
 sleep 3
 kill "$(pidof cosmovisor)"
 
 #remove execute file from local/bin
-rm -rf /usr/local/bin/seid
+sudo rm -rf /usr/local/bin/seid
 
 #add link current seid execute to local/bin
-ln -s "$HOME"/.sei/cosmovisor/current/bin/seid /usr/local/bin/seid
+sudo ln -s "$HOME"/.sei/cosmovisor/current/bin/seid /usr/local/bin/seid
 
 mkdir ~/bkup_cosmovisor_sei
 echo ulimit -n 1000000 >seid_start_with_cosmovisor.sh
