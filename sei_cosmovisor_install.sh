@@ -138,8 +138,6 @@ else
   installgo "$ver"
 fi
 
-
-
 # download binary
 echo -e "\e[1m\e[32m3. Downloading and building binaries... \e[0m" && sleep 1
 cd "$HOME" || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
