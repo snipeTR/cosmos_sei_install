@@ -288,15 +288,28 @@ sudo rm -rf /usr/local/bin/seid
 sudo ln -s "$HOME"/.sei/cosmovisor/current/bin/seid /usr/local/bin/seid
 
 mkdir ~/bkup_cosmovisor_sei
-echo ulimit -n 1000000 >seid_start_with_cosmovisor.sh
+echo "ulimit -n 1000000" >seid_start_with_cosmovisor.sh
 echo ""if" [ ! \"\$(systemctl is-active seid)\" == \"inactive\" ]; "then" systemctl stop seid && systemctl disable seid && echo -e \"\\e[1m\\e[36mseid service has been shut down and disabled.\\n \\e[0m \"; "fi"" >>seid_start_with_cosmovisor.sh
 echo ""if" [ \"\$(systemctl is-active seid)\" == \"inactive\"  ]; "then" echo -e \"\\e[1m\\e[36mseid service is not running, no need to turn off seid service.\\n \\e[0m \"; "fi"" >>seid_start_with_cosmovisor.sh
-echo pgrep cossmovisor >>seid_start_with_cosmovisor.sh
-echo ""if" [ \"$?\" -eq \"0\" ]; "then" echo -e \"\\e[1m\\e[31m\\n\\n\\n-Currently cosmovisor is already running..\\n-if you don't know what you are doing\\nplease close the running cosmovisor and try again.\\n-press \\e[1m\\e[32m[F/f]\\e[1m\\e[31m to go ahead and \\e[1m\\e[36mforce cosmovisor to run.\\n\\e[1m\\e[31m-press \\e[1m\\e[32mANY KEY\\e[1m\\e[31m run it again cosmovisor \\e[1m\\e[36m(The currently running cosmovisor is terminated.) \\n\\n\\n\\e[0m\"; "fi"" >>seid_start_with_cosmovisor.sh
-echo read -rsn1 answer >>seid_start_with_cosmovisor.sh
+echo "pgrep cosmovisor >/dev/null 2>&1" >>seid_start_with_cosmovisor.sh
+echo ""if" [ \"\$?\" -eq \"0\" ]; "then" echo -e \"\\e[1m\\e[31m\\n\\n\\n-Currently cosmovisor is already running..\\n-if you don't know what you are doing\\nplease close the running cosmovisor and try again.\\n-press \\e[1m\\e[32m[F/f]\\e[1m\\e[31m to go ahead and \\e[1m\\e[36mforce cosmovisor to run.\\n\\e[1m\\e[31m-press \\e[1m\\e[32mANY KEY\\e[1m\\e[31m run it again cosmovisor \\e[1m\\e[36m(The currently running cosmovisor is terminated.) \\n\\n\\n\\e[0m\"; "fi"" >>seid_start_with_cosmovisor.sh
+echo "read -rsn1 answer" >>seid_start_with_cosmovisor.sh
 echo  ""if" [ \""\$"answer\" == \"\${answer#[Ff]}\" ] ; "then" pkill cosmovisor; "fi"" >>seid_start_with_cosmovisor.sh
-echo UNSAFE_SKIP_BACKUP=true DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start init ~/.sei >>seid_start_with_cosmovisor.sh
+echo "UNSAFE_SKIP_BACKUP=true DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start init ~/.sei" >>seid_start_with_cosmovisor.sh
 chmod +x seid_start_with_cosmovisor.sh
+
+echo "ulimit -n 1000000" >seid_start_with_service.sh
+echo "pgrep cosmovisor >/dev/null 2>&1" >>seid_start_with_service.sh
+echo ""if" [ \"\$?\" -eq \"0\" ]; "then" echo -e \"\\e[1m\\e[31m\\n\\n\\n-Currently cosmovisor is already running..\\n-cosmovisor shutdown..\\n\\e[0m\" && pkill cosmovisor; "fi"" >>seid_start_with_service.sh
+echo "sleep 2" >>seid_start_with_service.sh
+echo "pgrep cosmovisor >/dev/null 2>&1" >>seid_start_with_service.sh
+echo ""if" [ \"\$?\" -eq \"0\" ]; "then" echo -e \"\\e[1m\\e[31m\\n-Failed closing cosmovisor...\\n-cannot be terminated..\\n\\e[0m\" && exit 2; "fi"" >>seid_start_with_service.sh
+echo "systemctl enable seid" >>seid_start_with_service.sh
+echo "systemctl start seid" >>seid_start_with_service.sh
+echo "sleep 3" >>seid_start_with_service.sh
+echo ""if" [ \"\$(systemctl is-active seid)\" == \"inactive\"  ]; "then" echo -e \"\\e[1m\\e[31mseid service is not running, \\nTry running the script again.\\n\\e[0m \" && exit 2; "fi"" >>seid_start_with_service.sh
+echo ""if" [ ! \"\$(systemctl is-active seid)\" == \"inactive\" ]; "then" echo -e \"\\e[1m\\e[32mseid service is currently running.\\e[0m\"; "fi"" >>seid_start_with_service.sh
+chmod +x seid_start_with_service.sh
 
 
 echo '=============== SETUP FINISHED ==================='
