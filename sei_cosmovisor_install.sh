@@ -169,9 +169,6 @@ seid config node tcp://localhost:"${SEI_PORT}657"
 echo -e "\e[1m\e[32m-- seid init "$NODENAME" --chain-id "$SEI_CHAIN_ID" \e[0m"
 seid init "$NODENAME" --chain-id "$SEI_CHAIN_ID"
 
-# download genesis and addrbook
-
-
 # set custom ports
 sed -i.bak -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.0.0.1:${SEI_PORT}658\"%; s%^laddr = \"tcp://127.0.0.1:26657\"%laddr = \"tcp://127.0.0.1:${SEI_PORT}657\"%; s%^pprof_laddr = \"localhost:6060\"%pprof_laddr = \"localhost:${SEI_PORT}060\"%; s%^laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:${SEI_PORT}656\"%; s%^prometheus_listen_addr = \":26660\"%prometheus_listen_addr = \":${SEI_PORT}660\"%" "$HOME"/.sei/config/config.toml
 sed -i.bak -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:${SEI_PORT}317\"%; s%^address = \":8080\"%address = \":${SEI_PORT}080\"%; s%^address = \"0.0.0.0:9090\"%address = \"0.0.0.0:${SEI_PORT}090\"%; s%^address = \"0.0.0.0:9091\"%address = \"0.0.0.0:${SEI_PORT}091\"%" "$HOME"/.sei/config/app.toml
@@ -214,6 +211,10 @@ sed -i -e "s/prometheus = false/prometheus = true/" "$HOME"/.sei/config/config.t
 
 # reset
 seid tendermint unsafe-reset-all --home "$HOME"/.sei
+
+# download genesis and addrbook
+wget -qO $HOME/.sei/config/genesis.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-incentivized-testnet/genesis.json"
+wget -qO $HOME/.sei/config/addrbook.json "https://raw.githubusercontent.com/sei-protocol/testnet/main/sei-incentivized-testnet/addrbook.json"
 
 echo -e "\e[1m\e[32m4. Starting service... \e[0m" && sleep 1
 # create service
