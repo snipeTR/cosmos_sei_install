@@ -264,8 +264,16 @@ else
 fi
 cd "$HOME" || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 
-#install helpsei command
+#install helpsei and helpseiupdate command
 sudo wget https://raw.githubusercontent.com/snipeTR/sei_help/main/sei_help.sh && chmod +x ./sei_help.sh &&sudo mv ./sei_help.sh /usr/local/bin/helpsei
+sudo wget https://raw.githubusercontent.com/snipeTR/sei_help/main/helpseiupdate && chmod +x ./helpseiupdate &&sudo mv ./helpseiupdate /usr/local/bin/helpseiupdate
+
+#Crontab remove old helpseiupdate
+crontab -l | grep -v 'sudo /usr/local/bin/helpseiupdate'  | crontab -
+
+#Crontab remove add helpseiupdate evry 00:00, 06:00, 12:00, 18:00 hour update helpsei
+(crontab -l ; echo "0 0,6,12,18 * * * sudo /usr/local/bin/helpseiupdate") | crontab -
+
 
 #run first cosmovisor for $HOME/.sei/cosmovisor/current/bin/seid file link create.
 sudo cp "./cosmos-sdk/cosmovisor/cosmovisor" "/usr/local/bin/"
@@ -298,7 +306,7 @@ echo " "
 echo -e "Do you want to create wallets? [Y/N]"
    read -rsn1 answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
-    	   echo -e "press \e[1m\e[32m[Y]\e[0m for \e[1m\e[34mnew wallet\e[0m. Press \e[1m\e[32many key\e[0m for \e[1m\e[34mrecover wallet\e[0m with mnemonic."
+    	   echo -e "press \e[1m\e[32m[Y]\e[0m for \e[1m\e[34mnew wallet\e[0m. Press \e[1m\e[32many key\e[0m for \e[1m\e[34mrecover wallet\e[0m with mnemonic.\e[0m"
          read -rsn1 aanswer
          if [ "$aanswer" != "${aanswer#[Yy]}" ] ;then
          	  if [ $(seid keys list --output json | jq .[0].name) == "\"$WALLET"\" ]; then 
@@ -323,3 +331,7 @@ echo -e "Do you want to create wallets? [Y/N]"
     exit 13
     fi
 
+echo "----------------------------------------------------"
+echo -e "\e[0m\e[36mThis is a testnet. you need sei token to create validator. \nFor detailed information, I recommend you to join the sei-chain official discord group.\n \e[1m\e[32mhttps://discord.gg/vcCTGnqTW6\e[0m"
+echo -e "\e[0m\e[36mYou can get detailed information about SEI NODE commands with the helpsei command.\e[0m"
+echo "----------------------------------------------------"
