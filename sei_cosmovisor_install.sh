@@ -289,10 +289,12 @@ sudo ln -s "$HOME"/.sei/cosmovisor/current/bin/seid /usr/local/bin/seid
 
 mkdir ~/bkup_cosmovisor_sei
 echo ulimit -n 1000000 >seid_start_with_cosmovisor.sh
-echo if [ ! "systemctl is-active seid" == "inactive"  ]; then systemctl stop seid; fi >>seid_start_with_cosmovisor.sh
-#if [ ! "systemctl is-active seid" == "inactive"  ]; then systemctl stop seid; fi>>seid_start_with_cosmovisor.sh
-echo systemctl stop seid >>seid_start_with_cosmovisor.sh
-echo pkill cosmovisor >>seid_start_with_cosmovisor.sh
+echo ""if" [ ! \"\$(systemctl is-active seid)\" == \"inactive\" ]; "then" systemctl stop seid && systemctl disable seid && echo -e \"\\e[1m\\e[36mseid service has been shut down and disabled.\\n \\e[0m \"; "fi"" >>seid_start_with_cosmovisor.sh
+echo ""if" [ \"\$(systemctl is-active seid)\" == \"inactive\"  ]; "then" echo -e \"\\e[1m\\e[36mseid service is not running, no need to turn off seid service.\\n \\e[0m \"; "fi"" >>seid_start_with_cosmovisor.sh
+echo pgrep cossmovisor >>seid_start_with_cosmovisor.sh
+echo ""if" [ \"$?\" -eq \"0\" ]; "then" echo -e \"\\e[1m\\e[31m\\n\\n\\n-Currently cosmovisor is already running..\\n-if you don't know what you are doing\\nplease close the running cosmovisor and try again.\\n-press \\e[1m\\e[32m[F/f]\\e[1m\\e[31m to go ahead and \\e[1m\\e[36mforce cosmovisor to run.\\n\\e[1m\\e[31m-press \\e[1m\\e[32mANY KEY\\e[1m\\e[31m run it again cosmovisor \\e[1m\\e[36m(The currently running cosmovisor is terminated.) \\n\\n\\n\\e[0m\"; "fi"" >>seid_start_with_cosmovisor.sh
+echo read -rsn1 answer >>seid_start_with_cosmovisor.sh
+echo  ""if" [ \""\$"answer\" == \"\${answer#[Ff]}\" ] ; "then" pkill cosmovisor; "fi"" >>seid_start_with_cosmovisor.sh
 echo UNSAFE_SKIP_BACKUP=true DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start init ~/.sei >>seid_start_with_cosmovisor.sh
 chmod +x seid_start_with_cosmovisor.sh
 
@@ -328,10 +330,11 @@ echo -e "Do you want to create wallets? [Y/N]"
     else
       echo No
       sleep 3
-    exit 13
+    exit 0
     fi
 
 echo "----------------------------------------------------"
 echo -e "\e[0m\e[36mThis is a testnet. you need sei token to create validator. \nFor detailed information, I recommend you to join the sei-chain official discord group.\n \e[1m\e[32mhttps://discord.gg/vcCTGnqTW6\e[0m"
 echo -e "\e[0m\e[36mYou can get detailed information about SEI NODE commands with the helpsei command.\e[0m"
+echo -e "\e[0m\e[01mIf you want to run sei-chain atlantic-1 NODE with cosmovisor. Run the script \e[0m\e[36m"seid_start_with_cosmovisor.sh".\e[0m"
 echo "----------------------------------------------------"
