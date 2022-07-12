@@ -281,7 +281,11 @@ sudo ln -s "$HOME"/.sei/cosmovisor/current/bin/seid /usr/local/bin/seid
 
 mkdir ~/bkup_cosmovisor_sei
 echo ulimit -n 1000000 >seid_start_with_cosmovisor.sh
-echo UNSAFE_SKIP_BACKUP=true DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start init ~/.sei>>seid_start_with_cosmovisor.sh
+echo if [ ! "systemctl is-active seid" == "inactive"  ]; then systemctl stop seid; fi >>seid_start_with_cosmovisor.sh
+#if [ ! "systemctl is-active seid" == "inactive"  ]; then systemctl stop seid; fi>>seid_start_with_cosmovisor.sh
+echo systemctl stop seid >>seid_start_with_cosmovisor.sh
+echo pkill cosmovisor >>seid_start_with_cosmovisor.sh
+echo UNSAFE_SKIP_BACKUP=true DAEMON_HOME=~/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_DATA_BACKUP_DIR=~/bkup_cosmovisor_sei cosmovisor run start init ~/.sei >>seid_start_with_cosmovisor.sh
 chmod +x seid_start_with_cosmovisor.sh
 
 
