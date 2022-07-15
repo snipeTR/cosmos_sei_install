@@ -13,7 +13,7 @@ if [ -f ".bash_profile" ]; then
 			 cp .bash_profile .bsh_profile_org
 		fi
 fi
-source "$HOME"/.bash_profile
+if [ -f ".bash_profile" ]; then source "$HOME"/.bash_profile; fi
 
 # delete old line for dublicate.
 

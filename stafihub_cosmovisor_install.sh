@@ -14,7 +14,7 @@ if [ -f ".bash_profile" ]; then
 			 cp .bash_profile .bsh_profile_org
 		fi
 fi
-source "$HOME"/.bash_profile
+if [ -f ".bash_profile" ]; then source "$HOME"/.bash_profile; fi
 
 # delete old line for dublicate.
 
@@ -266,7 +266,7 @@ fi
 cd "$HOME" || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 
 #install helpstafihub and helpstafihubupdate command
-sudo wget https://raw.githubusercontent.com/snipeTR/stafihub_help/main/stafihub_help.sh && chmod +x ./stafihub_help.sh &&sudo mv ./stafihub_help.sh /usr/local/bin/helpstafihub
+sudo wget https://raw.githubusercontent.com/snipeTR/stafihub_help/main/stafihub_help.sh && chmod +x ./stafihub_help.sh &&sudo mv ./stafihub_help.sh /usr/local/bin/helpstafi
 sudo wget https://raw.githubusercontent.com/snipeTR/stafihub_help/main/helpstafihubupdate && chmod +x ./helpstafihubupdate &&sudo mv ./helpstafihubupdate /usr/local/bin/helpstafihubupdate
 
 #Crontab remove old helpstafihubupdate
@@ -354,6 +354,6 @@ echo -e "Do you want to create wallets? [Y/N]"
 
 echo "----------------------------------------------------"
 echo -e "\e[0m\e[36mThis is a testnet. you need stafihub token to create validator. \nFor detailed information, I recommend you to join the stafihub official discord group.\n \e[1m\e[32mhttps://discord.gg/vcCTGnqTW6\e[0m"
-echo -e "\e[0m\e[36mYou can get detailed information about stafihub NODE commands with the helpstafihub command.\e[0m"
+echo -e "\e[0m\e[36mYou can get detailed information about stafihub NODE commands with the helpstafi command.\e[0m"
 echo -e "\e[0m\e[01mIf you want to run stafihub public-testnet-v3 NODE with cosmovisor. Run the script \e[0m\e[36m"stafihubd_start_with_cosmovisor.sh".\e[0m"
 echo "----------------------------------------------------"
