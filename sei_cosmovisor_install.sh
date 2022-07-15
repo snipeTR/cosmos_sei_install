@@ -277,9 +277,10 @@ crontab -l | grep -v 'sudo /usr/local/bin/helpseiupdate'  | crontab -
 
 #run first cosmovisor for $HOME/.sei/cosmovisor/current/bin/seid file link create.
 sudo cp "./cosmos-sdk/cosmovisor/cosmovisor" "/usr/local/bin/"
-DAEMON_HOME=$HOME/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true ./cosmos-sdk/cosmovisor/cosmovisor run start
-sleep 3
+DAEMON_HOME=$HOME/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true ./cosmos-sdk/cosmovisor/cosmovisor run start &
+sleep 5
 kill "$(pidof cosmovisor)"
+wait
 
 #remove execute file from local/bin
 sudo rm -rf /usr/local/bin/seid
