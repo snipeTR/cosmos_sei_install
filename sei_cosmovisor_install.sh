@@ -249,7 +249,7 @@ sudo systemctl daemon-reload
 echo -e "echo sudo systemctl enable seid\t\tfor automatic service start when the server is up"
 echo -e "echo sudo systemctl disable seid\t\tdisable for automatic service start when the server is up"
 echo -e "echo sudo systemctl start seid\t\tstarting validator for linux service \e[1m\e[31mplease dont use run cosmovisor\e[0m"
-echo -e "echo sudo systemctl stop seid\\tstop validator"
+echo -e "echo sudo systemctl stop seid\t\tstop validator"
 echo -e "echo sudo systemctl restart seid\t\tre start validator"
 echo -e "\e[1m\e[32mNOTE:Please do not use these services while working with cosmovisor.\e[0m"
 

@@ -224,7 +224,7 @@ sudo systemctl daemon-reload
 echo -e "sudo systemctl enable stafihubd\t\tfor automatic service start when the server is up"
 echo -e "sudo systemctl disable stafihubd\t\tdisable for automatic service start when the server is up"
 echo -e "sudo systemctl start stafihubd\t\t\t\tstarting validator for linux service \e[1m\e[31mplease dont use run cosmovisor\e[0m"
-echo -e "sudo systemctl stop stafihubd\₺\tstop validator"
+echo -e "sudo systemctl stop stafihubd\t\tstop validator"
 echo -e "sudo systemctl restart stafihubd\t\tre start validator"
 echo -e "\e[1m\e[32mNOTE:Please do not use these services while working with cosmovisor.\e[0m"
 echo -e "\e[1m\e[32m5. installing Cosmovisor... \e[0m" && sleep 1
