@@ -3,7 +3,7 @@
 #  discord
 #
 #  snipeTR#8374 & karboran#2719
-# beta1.1v
+# beta1.2v
 
 echo tnx for kj89
 sleep 1
@@ -311,6 +311,7 @@ echo -e "Do you want to create wallets? [Y/N]"
          	  if [[ $(stafihubd keys list --output json | jq .[0].name) == "\"$WALLET"\" || $(stafihubd keys list --output json | jq .[1].name) == "\"$WALLET"\" || $(stafihubd keys list --output json | jq .[2].name) == "\"$WALLET"\" || $(stafihubd keys list --output json | jq .[3].name) == "\"$WALLET"\" ]]; then 
          		  echo -e "The wallet named..:\e[1m\e[34m$WALLET\e[0m is already installed on your system,"
          		  read -p "Enter \e[1m\e[34mnew\e[0m wallet name: " WALLETT
+         		  sed -i '/WALLET/d' "$HOME/.bash_profile"
          		  echo "export WALLET=$WALLETT" >> "$HOME"/.bash_profile
          		  stafihubd keys add $WALLETT
          	  else

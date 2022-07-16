@@ -46,38 +46,38 @@ source $HOME/.bash_profile
 echo -e '\e[1m\e[35mm=================================================\e[0m'
 
 echo -e "Your node name: \e[1m\e[32m$NODENAME\e[0m"
-	if [ $NODENAME ]; then echo -e "\e[1m\e[31mNode name not defined\e[0m---NODENAME"; fi
+	if [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31mNode name not defined\e[0m---NODENAME\n"; fi
 	
 echo -e "Your wallet name: \e[1m\e[32m$WALLET\e[0m"
-	if [ $WALLET ]; then; echo -e "\e[1m\e[31mNode name not defined\e[0m---WALLET"; fi
+	if [ ! "$(echo $WALLET | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31mNode name not defined\e[0m---WALLET\n"; fi
 	
 echo -e "Your chain name: \e[1m\e[32m$SEI_CHAIN_ID\e[0m"
-	if [ $SEI_CHAIN_ID ]; then; echo -e "\e[1m\e[31mnot defined\e[0m---SEI_CHAIN_ID"; fi
+	if [ ! "$(echo $SEI_CHAIN_ID | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31mnot defined\e[0m---SEI_CHAIN_ID\n"; fi
 	
 echo -e "Your port: \e[1m\e[32m$SEI_PORT\e[0m"
-	if [ $SEI_PORT ]; then; echo -e "\e[1m\e[31mnot defined\e[0m---SEI_PORT"; fi
+	if [ ! "$(echo $SEI_PORT | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31mnot defined\e[0m---SEI_PORT\n"; fi
 	
 echo " "
 
 echo -e "UNSAFE_SKIP_BACKUP: \e[1m\e[32m$UNSAFE_SKIP_BACKUP\e[0m"
-	if [ $UNSAFE_SKIP_BACKUP ]; then; echo -e "\e[1m\e[31mnot defined\e[0m---UNSAFE_SKIP_BACKUP"; fi
+	if [ ! "$(echo $UNSAFE_SKIP_BACKUP | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31mnot defined\e[0m---UNSAFE_SKIP_BACKUP\n"; fi
 	
 echo -e "DAEMON_HOME: \e[1m\e[32m$DAEMON_HOME\e[0m"
-	if [ $DAEMON_HOME ]; then; echo -e "\e[1m\e[31mnot defined\e[0m---DAEMON_HOME"; fi
+	if [ ! "$(echo $DAEMON_HOME | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31mnot defined\e[0m---DAEMON_HOME\n"; fi
 	
 echo -e "DAEMON_NAME: \e[1m\e[32m$DAEMON_NAME\e[0m"
-	if [ $DAEMON_NAME ]; then; echo -e "\e[1m\e[31mnot defined\e[0m---DAEMON_NAME"; fi
+	if [ ! "$(echo $DAEMON_NAME | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31mnot defined\e[0m---DAEMON_NAME\n"; fi
 	
 echo -e "DAEMON_RESTART_AFTER_UPGRADE: \e[1m\e[32m$DAEMON_RESTART_AFTER_UPGRADE\e[0m"
-	if [ $DAEMON_RESTART_AFTER_UPGRADE ]; then; echo -e "\e[1m\e[31mnot defined\e[0m---DAEMON_RESTART_AFTER_UPGRADE"; fi
+	if [ ! "$(echo $DAEMON_RESTART_AFTER_UPGRADE | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31mnot defined\e[0m---DAEMON_RESTART_AFTER_UPGRADE\n"; fi
 	
 echo -e "DAEMON_DATA_BACKUP_DIR: \e[1m\e[32m$DAEMON_DATA_BACKUP_DIR\e[0m"
-	if [ $DAEMON_DATA_BACKUP_DIR ]; then; echo -e "\e[1m\e[31mnot defined\e[0m---DAEMON_DATA_BACKUP_DIR"; fi
-	
+	if [ ! "$(echo $DAEMON_DATA_BACKUP_DIR | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31mnot defined\e[0m---DAEMON_DATA_BACKUP_DIR\n"; fi
+		
 echo '================================================='
 
    echo "\e[1m\e[35mPlease check the accuracy of the information \e[1m\e[36mCAREFULLY.\e[0m"
-   echo "\e[1m\e[31mAre the above values correct? [Y/N]\e[0m"
+   echo "\e[1m\e[31mAre the above ALL values correct? [Y/N]\e[0m"
    read -rsn1 answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
       echo Yes
