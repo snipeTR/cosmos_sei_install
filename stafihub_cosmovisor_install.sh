@@ -26,7 +26,7 @@ fi
 # set vars
 if [ ! "$stafihub_PORT" ]; then stafihub_PORT=13; fi
 if [ "$NODENAME" ]; then 
-	echo -e "Node name \e[1m\e[32mseting before\e[0m, NODE NAME..:\e[1m\e[32m$NODENAME\e[0m"
+	echo -e "\nNode name \e[1m\e[32mseting before\e[0m, NODE NAME..:\e[1m\e[32m$NODENAME\e[0m"
   echo -e "Press [ANY KEY] to use the \e[1m\e[32msame node name\e[0m."
   echo -e "Press [Y/y] to change \e[1m\e[32m$NODENAME\e[0m."
    read -rsn1 answer
@@ -46,7 +46,7 @@ if [ "$NODENAME" ]; then
     echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
 fi
 if [ "$WALLET" ]; then 
-	echo -e "Wallet name \e[1m\e[32mseting before\e[0m, WALLET NAME..:\e[1m\e[32m$WALLET\e[0m"
+	echo -e "\nWallet name \e[1m\e[32mseting before\e[0m, WALLET NAME..:\e[1m\e[32m$WALLET\e[0m"
   echo -e "Press ANY KEY to use the \e[1m\e[32msame wallet name\e[0m."
   echo -e "Press [Y/y] to change \e[1m\e[32m$WALLET\e[0m."
    read -rsn1 answer

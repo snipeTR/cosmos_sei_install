@@ -10,7 +10,7 @@ sleep 1
 cd "$HOME" || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 #update script download
 if [ -f sei_cosmovisor_update.sh ]; then rm -rf sei_cosmovisor_update.sh; fi
-wget -O sei_cosmovisor_update.sh https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_update.sh> /dev/null 2>&1 && chmod +x sei_cosmovisor_update.sh
+wget -O "sei_cosmovisor_update.sh" "https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_update.sh> /dev/null 2>&1 && chmod +x sei_cosmovisor_update.sh"
 
 if [ -f ".bash_profile" ]; then 
 		if [ -f ".bsh_profil_org" ]; then
@@ -27,48 +27,48 @@ fi
 
 # set vars
 if [ "$NODENAME" ]; then 
-	echo -e "Node name \e[1m\e[32mseting before\e[0m, NODE NAME..:\e[1m\e[32m$NODENAME\e[0m"
+  echo -e "\nNode name \e[1m\e[32mseting before\e[0m, NODE NAME..:\e[1m\e[32m$NODENAME\e[0m"
   echo -e "Press [ANY KEY] to use the \e[1m\e[32msame node name\e[0m."
   echo -e "Press [Y/y] to change \e[1m\e[32m$NODENAME\e[0m."
    read -rsn1 answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
     	NODENAME=''
-    	 while [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]; do
-         	read -p "Enter node name: " NODENAME
-         	if [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31m*** Node name cannot be empty.\e[0m" ; fi
+    	 while [ ! "$(echo $NODENAME | wc -m)" -gt "1" ]; do
+         	read -p "Enter Node name: " NODENAME
+         	if [ ! "$(echo $NODENAME | wc -m)" -gt "1" ]; then echo -e "\e[1m\e[31m*** Node name cannot be empty.\e[0m" ; fi
          done 
       echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
     fi
   else
-    while [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]; do
-       	read -p "Enter node name: " NODENAME
-       	if [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31m*** Node name cannot be empty.\e[0m" ; fi
+    while [ ! "$(echo $NODENAME | wc -m)" -gt "1" ]; do
+       	read -p "Enter Node name: " NODENAME
+       	if [ ! "$(echo $NODENAME | wc -m)" -gt "1" ]; then echo -e "\e[1m\e[31m*** Node name cannot be empty.\e[0m" ; fi
        done 
-    echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
 fi
+echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
 
 if [ ! "$SEI_PORT" ]; then SEI_PORT=12; fi
 
 if [ "$WALLET" ]; then 
-	echo -e "Wallet name \e[1m\e[32mseting before\e[0m, WALLET NAME..:\e[1m\e[32m$WALLET\e[0m"
+	echo -e "\nWallet name \e[1m\e[32mseting before\e[0m, WALLET NAME..:\e[1m\e[32m$WALLET\e[0m"
   echo -e "Press ANY KEY to use the \e[1m\e[32msame wallet name\e[0m."
   echo -e "Press [Y/y] to change \e[1m\e[32m$WALLET\e[0m."
    read -rsn1 answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
     	WALLET=''
     	 while [ ! "$(echo $WALLET | wc -m)" -gt "1" ]; do 
-         	read -p "Enter node name: " WALLET
+         	read -p "Enter Wallet name: " WALLET
          	if [ ! "$(echo $WALLET | wc -m)" -gt "1" ] ; then echo -e "\e[1m\e[31m*** Wallet name cannot be empty.\e[0m" ; fi
          done 
       echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
     fi
   else
-    [ ! "$(echo $WALLET | wc -m)" -gt "1" ]; do
-       	read -p "Enter node name: " WALLET
+       while [ ! "$(echo $WALLET | wc -m)" -gt "1" ]; do
+       	read -p "Enter Wallet name: " WALLET
        	if [ ! "$(echo $WALLET | wc -m)" -gt "1" ]; then echo -e "\e[1m\e[31m*** Wallet name cannot be empty.\e[0m" ; fi
        done 
-    echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
 fi
+echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
 
 echo "export SEI_CHAIN_ID=atlantic-1" >> "$HOME"/.bash_profile
 echo "export SEI_PORT=${SEI_PORT}" >> "$HOME"/.bash_profile
