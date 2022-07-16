@@ -3,7 +3,7 @@
 #  discord
 #
 #  snipeTR#8374 & karboran#2719
-# beta1v
+# beta1.1v
 
 echo tnx for kj89
 sleep 1
@@ -352,8 +352,7 @@ echo -e "Do you want to create wallets? [Y/N]"
          	  fi
          	 echo -e "\n\e[0m\e[31mThe top line is 24 words.\e[0m \e[0m\e[36mThese words are a secret, do not publish, do not show in public.\e[0m\n\n\n"
          else
-           echo " "
-           echo -e "\e[1m\e[32mPlease enter the recovery words for wallet.\e[0m wallet name..: \e[1m\e[35m$WALLET.\e[0m"
+           echo -e "\n\e[1m\e[32mPlease enter the recovery words for wallet.\e[0m wallet name..: \e[1m\e[35m$WALLET.\e[0m"
            RET=987
            until [ ${RET} -eq 0 ]; do
               if [ ! ${RET} -eq 987 ]; then echo "\e[1m\e[31mYour recovery words are incorrect, please re-enter carefully.\e[0m"; fi
