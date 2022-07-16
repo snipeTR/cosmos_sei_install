@@ -3,7 +3,7 @@
 #  discord
 #
 #  snipeTR#8374 & karboran#2719
-# beta1.4v
+# beta1.5v
 
 echo tnx for kj89
 sleep 1
