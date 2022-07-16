@@ -11,7 +11,7 @@ cd "$HOME" || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 #update script download
 if [ -f stafihub_cosmovisor_update.sh ]; then rm -rf stafihub_cosmovisor_update.sh; fi
 	#alt satir olusturulunca eklencek
-#wget -O stafihub_cosmovisor_update.sh https://raw.githubusercontent.com/snipeTR/cosmos_stafihub_install/main/stafihub_cosmovisor_update.sh && chmod +x stafihub_cosmovisor_update.sh
+#wget -O stafihub_cosmovisor_update.sh https://raw.githubusercontent.com/snipeTR/cosmos_stafihub_install/main/stafihub_cosmovisor_update.sh> /dev/null 2>&1 && chmod +x stafihub_cosmovisor_update.sh
 
 if [ -f ".bash_profile" ]; then 
 		if [ -f ".bsh_profil_org" ]; then
