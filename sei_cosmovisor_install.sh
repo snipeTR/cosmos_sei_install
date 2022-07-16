@@ -105,7 +105,7 @@ echo -e "\e[1m\e[32m2. Installing dependencies... \e[0m" && sleep 1
 # packages
 sudo apt-get install software-properties-common -y
 sudo add-apt-repository ppa:bashtop-monitor/bashtop -y
-sudo apt install curl build-essential git wget jq make gcc tmux tree mc software-properties-common net-tools bashtop qrencode -y
+sudo apt install curl build-essential git wget jq make gcc tmux tree mc software-properties-common net-tools bashtop qrencode htop -y
 
 # install go function
 installgo () 
@@ -294,7 +294,7 @@ crontab -l | grep -v 'sudo /usr/local/bin/helpseiupdate'  | crontab -
 #run first cosmovisor for $HOME/.sei/cosmovisor/current/bin/seid file link create.
 sudo cp "./cosmos-sdk/cosmovisor/cosmovisor" "/usr/local/bin/"
 echo "please wait..."
-DAEMON_HOME=$HOME/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true ./cosmos-sdk/cosmovisor/cosmovisor run start > /dev/null 2>&1
+DAEMON_HOME=$HOME/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true ./cosmos-sdk/cosmovisor/cosmovisor run start& > /dev/null 2>&1
 sleep 4
 kill "$(pidof cosmovisor)"
 wait

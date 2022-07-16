@@ -10,7 +10,7 @@ sleep 1
 cd "$HOME" || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 #update script download
 if [ -f stafihub_cosmovisor_update.sh ]; then rm -rf stafihub_cosmovisor_update.sh; fi
-wget -O stafihub_cosmovisor_update.sh https://raw.githubusercontent.com/snipeTR/cosmos_stafihub_install/main/stafihub_cosmovisor_update.sh> /dev/null 2>&1 && chmod +x stafihub_cosmovisor_update.sh
+wget -O "stafihub_cosmovisor_update.sh" "https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/stafihub_cosmovisor_update.sh" > /dev/null 2>&1 && chmod +x stafihub_cosmovisor_update.sh
 
 if [ -f ".bash_profile" ]; then 
 		if [ -f ".bsh_profil_org" ]; then
@@ -261,7 +261,7 @@ crontab -l | grep -v 'sudo /usr/local/bin/helpstafihubupdate'  | crontab -
 #run first cosmovisor for $HOME/.stafihub/cosmovisor/current/bin/stafihubd file link create.
 sudo cp "./cosmos-sdk/cosmovisor/cosmovisor" "/usr/local/bin/"
 echo "please wait..."
-DAEMON_HOME=$HOME/.stafihub DAEMON_NAME=stafihubd DAEMON_RESTART_AFTER_UPGRADE=true ./cosmos-sdk/cosmovisor/cosmovisor run start > /dev/null 2>&1
+DAEMON_HOME=$HOME/.stafihub DAEMON_NAME=stafihubd DAEMON_RESTART_AFTER_UPGRADE=true ./cosmos-sdk/cosmovisor/cosmovisor run start& > /dev/null 2>&1
 sleep 4
 kill "$(pidof cosmovisor)"
 #remove execute file from local/bin
