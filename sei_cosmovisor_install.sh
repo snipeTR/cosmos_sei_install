@@ -3,7 +3,7 @@
 #  discord
 #
 #  snipeTR#8374 & karboran#2719
-# beta1.2v
+# beta1.3v
 
 echo tnx for kj89
 sleep 1
@@ -33,16 +33,14 @@ if [ "$NODENAME" ]; then
    read -rsn1 answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
     	NODENAME=''
-    	 while [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]
-         do
+    	 while [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]; do
          	read -p "Enter node name: " NODENAME
          	if [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31m*** Node name cannot be empty.\e[0m" ; fi
          done 
       echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
     fi
   else
-    while [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]
-       do
+    while [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]; do
        	read -p "Enter node name: " NODENAME
        	if [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31m*** Node name cannot be empty.\e[0m" ; fi
        done 
@@ -58,16 +56,14 @@ if [ "$WALLET" ]; then
    read -rsn1 answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
     	WALLET=''
-    	 while [ ! "$(echo $WALLET | wc -m)" -gt "1" ] 
-         do
+    	 while [ ! "$(echo $WALLET | wc -m)" -gt "1" ]; do 
          	read -p "Enter node name: " WALLET
          	if [ ! "$(echo $WALLET | wc -m)" -gt "1" ] ; then echo -e "\e[1m\e[31m*** Wallet name cannot be empty.\e[0m" ; fi
          done 
       echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
     fi
   else
-    [ ! "$(echo $WALLET | wc -m)" -gt "1" ]
-       do
+    [ ! "$(echo $WALLET | wc -m)" -gt "1" ]; do
        	read -p "Enter node name: " WALLET
        	if [ ! "$(echo $WALLET | wc -m)" -gt "1" ]; then echo -e "\e[1m\e[31m*** Wallet name cannot be empty.\e[0m" ; fi
        done 
@@ -345,7 +341,7 @@ echo -e "Do you want to create wallets? [Y/N]"
          	  if [[ $(seid keys list --output json | jq .[0].name) == "\"$WALLET"\" || $(seid keys list --output json | jq .[1].name) == "\"$WALLET"\" || $(seid keys list --output json | jq .[2].name) == "\"$WALLET"\" || $(seid keys list --output json | jq .[3].name) == "\"$WALLET"\" ]]; then 
          		  echo -e "The wallet named..:\e[1m\e[34m$WALLET\e[0m is already installed on your system,"
          		  read -p "Enter \e[1m\e[34mnew\e[0m wallet name: " WALLETT
-         		  sed -i '/WALLET/d' "$HOME/.bash_profile"
+         		  
          		  echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
          		  seid keys add $WALLETT
          	  else
