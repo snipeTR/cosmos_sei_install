@@ -1,7 +1,11 @@
 #!/bin/bash
-#wget -O sei_cosmovisor_install.sh https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_install.sh && chmod +x sei_cosmovisor_install.sh
+
+#  discord
+#
+#  snipeTR#8374 & karboran#2719
+# beta1v
+
 echo tnx for kj89
-	
 sleep 1
 cd "$HOME" || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 #update script download
@@ -24,20 +28,26 @@ fi
 # set vars
 if [ "$NODENAME" ]; then 
 	echo -e "Node name \e[1m\e[32mseting before\e[0m, NODE NAME..:\e[1m\e[32m$NODENAME\e[0m"
-  echo -e "Press ANY KEY to use the \e[1m\e[32msame node name\e[0m."
+  echo -e "Press [ANY KEY] to use the \e[1m\e[32msame node name\e[0m."
   echo -e "Press [Y/y] to change \e[1m\e[32m$NODENAME\e[0m."
    read -rsn1 answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
-      read -p "Enter node name: " NODENAME
-      echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
-    else
+    	NODENAME=''
+    	 while [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]
+         do
+         	read -p "Enter node name: " NODENAME
+         	if [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31m*** Node name cannot be empty.\e[0m" ; fi
+         done 
       echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
     fi
   else
-  read -p "Enter node name: " NODENAME
-  echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
+    while [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]
+       do
+       	read -p "Enter node name: " NODENAME
+       	if [ ! "$(echo $NODENAME | wc -m)" -gt "1"  ]; then echo -e "\e[1m\e[31m*** Node name cannot be empty.\e[0m" ; fi
+       done 
+    echo "export NODENAME=$NODENAME" >> "$HOME"/.bash_profile
 fi
-
 
 if [ ! "$SEI_PORT" ]; then SEI_PORT=12; fi
 
@@ -47,16 +57,22 @@ if [ "$WALLET" ]; then
   echo -e "Press [Y/y] to change \e[1m\e[32m$WALLET\e[0m."
    read -rsn1 answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
-      read -p "Enter wallet name: " WALLET
-      echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
-    else
+    	WALLET=''
+    	 while [ ! "$(echo $WALLET | wc -m)" -gt "1" ] 
+         do
+         	read -p "Enter node name: " WALLET
+         	if [ ! "$(echo $WALLET | wc -m)" -gt "1" ] ; then echo -e "\e[1m\e[31m*** Wallet name cannot be empty.\e[0m" ; fi
+         done 
       echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
     fi
   else
-  read -p "Enter wallet name: " WALLET
-  echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
+    [ ! "$(echo $WALLET | wc -m)" -gt "1" ]
+       do
+       	read -p "Enter node name: " WALLET
+       	if [ ! "$(echo $WALLET | wc -m)" -gt "1" ]; then echo -e "\e[1m\e[31m*** Wallet name cannot be empty.\e[0m" ; fi
+       done 
+    echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
 fi
-
 
 echo "export SEI_CHAIN_ID=atlantic-1" >> "$HOME"/.bash_profile
 echo "export SEI_PORT=${SEI_PORT}" >> "$HOME"/.bash_profile
@@ -85,7 +101,6 @@ echo '================================================='
       sleep 3
     exit 13
     fi
-
 echo -e "\e[1m\e[32m1. Updating packages... \e[0m" && sleep 1
 # update
 sudo apt update && sudo apt upgrade -y
@@ -214,7 +229,7 @@ sed -i -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"10usei\"/" "$HOME"/
 # enable prometheus
 sed -i -e "s/prometheus = false/prometheus = true/" "$HOME"/.sei/config/config.toml
 
-echo -e "\e[1m\e[32m4. Starting service... \e[0m" && sleep 1
+echo -e "\e[1m\e[32m4. Creating service... \e[0m" && sleep 1
 # create service
 sudo tee /etc/systemd/system/seid.service > /dev/null <<EOF
 [Unit]
@@ -233,9 +248,14 @@ WantedBy=multi-user.target
 EOF
 
 # start service
+echo -e "\e[1m\e[32mservice command info... \e[0m"
 sudo systemctl daemon-reload
-echo sudo systemctl enable seid
-echo sudo systemctl restart seid
+echo -e "echo sudo systemctl enable seid\t\tfor automatic service start when the server is up"
+echo -e "echo sudo systemctl disable seid\t\tdisable for automatic service start when the server is up"
+echo -e "echo sudo systemctl start seid\t\tstarting validator for linux service \e[1m\e[31mplease dont use run cosmovisor\e[0m"
+echo -e "echo sudo systemctl stop seid\\tstop validator"
+echo -e "echo sudo systemctl restart seid\t\tre start validator"
+echo -e "\e[1m\e[32mNOTE:Please do not use these services while working with cosmovisor.\e[0m"
 
 echo -e "\e[1m\e[32m5. installing Cosmovisor... \e[0m" && sleep 1
 
@@ -314,36 +334,36 @@ chmod +x seid_start_with_service.sh
 
 
 echo '=============== SETUP FINISHED ==================='
-echo -e 'To check logs: \e[1m\e[32m."/"seid_start_with_cosmovisor.sh\e[0m'
-echo -e "To check sync status: \e[1m\e[32mcurl -s localhost:${SEI_PORT}657/status | jq .result.sync_info\e[0m"
-echo " "
-echo " "
-echo " "
+echo -e "\n\e[1m\e[32mHere are some \e[0mCOMANDS\e[1m\e[32m that will make your validator job easier.\n\n\e[1m\e[32mhelpsei\n\e[1m\e[34mIt gives information about some commands about sei-chain validator.\nseid service or application must be running.\n\n\e[1m\e[32mhelpseiupdate\n\e[1m\e[34mhelpsei updates the command.\n\n\e[1m\e[32mseiport\n\e[1m\e[34mLists all ports used by seid.\ndetailed information in $HOME/.sei/config/config.toml\e[0m\n\n\n"
+sleep 2
 echo -e "Do you want to create wallets? [Y/N]"
    read -rsn1 answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
-    	   echo -e "press \e[1m\e[32m[Y]\e[0m for \e[1m\e[34mnew wallet\e[0m. Press \e[1m\e[32many key\e[0m for \e[1m\e[34mrecover wallet\e[0m with mnemonic.\e[0m"
+    	   echo -e "press \e[1m\e[32m[Y]\e[0m for \e[1m\e[34mnew wallet\e[0m. \nPress \e[1m\e[32m[any key]\e[0m for \e[1m\e[34mrecover wallet\e[0m with mnemonic.\e[0m"
          read -rsn1 aanswer
          if [ "$aanswer" != "${aanswer#[Yy]}" ] ;then
-         	  if [ $(seid keys list --output json | jq .[0].name) == "\"$WALLET"\" ]; then 
+         	  if [[ $(seid keys list --output json | jq .[0].name) == "\"$WALLET"\" || $(seid keys list --output json | jq .[1].name) == "\"$WALLET"\" || $(seid keys list --output json | jq .[2].name) == "\"$WALLET"\" || $(seid keys list --output json | jq .[3].name) == "\"$WALLET"\" ]]; then 
          		  echo -e "The wallet named..:\e[1m\e[34m$WALLET\e[0m is already installed on your system,"
-         		  read -p "Enter new wallet name: " WALLETT
+         		  read -p "Enter \e[1m\e[34mnew\e[0m wallet name: " WALLETT
+         		  echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
          		  seid keys add $WALLETT
          	  else
          	    seid keys add $WALLET
          	  fi
+         	 echo -e "\n\e[0m\e[31mThe top line is 24 words.\e[0m \e[0m\e[36mThese words are a secret, do not publish, do not show in public.\e[0m\n\n\n"
          else
+           echo " "
            echo -e "\e[1m\e[32mPlease enter the recovery words for wallet.\e[0m wallet name..: \e[1m\e[35m$WALLET.\e[0m"
            RET=987
            until [ ${RET} -eq 0 ]; do
               if [ ! ${RET} -eq 987 ]; then echo "\e[1m\e[31mYour recovery words are incorrect, please re-enter carefully.\e[0m"; fi
-              seid keys add $WALLET --recovery
+              seid keys add $WALLET --recover
               RET=$?
            done
          fi
     else
-      echo No
-      sleep 3
+      echo Your answer No. please create wallet
+      sleep 1
     exit 0
     fi
 
@@ -351,4 +371,5 @@ echo "----------------------------------------------------"
 echo -e "\e[0m\e[36mThis is a testnet. you need sei token to create validator. \nFor detailed information, I recommend you to join the sei-chain official discord group.\n \e[1m\e[32mhttps://discord.gg/vcCTGnqTW6\e[0m"
 echo -e "\e[0m\e[36mYou can get detailed information about SEI NODE commands with the helpsei command.\e[0m"
 echo -e "\e[0m\e[01mIf you want to run sei-chain atlantic-1 NODE with cosmovisor. Run the script \e[0m\e[36m"seid_start_with_cosmovisor.sh".\e[0m"
+echo -e "\e[0m\e[01mIf you want to run sei-chai atlantic-1 NODE with linux services. Run the script \e[0m\e[36m"seid_start_with_service.sh".\e[0m"
 echo "----------------------------------------------------"
