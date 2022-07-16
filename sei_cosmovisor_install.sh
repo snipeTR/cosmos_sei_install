@@ -3,7 +3,7 @@
 #  discord
 #
 #  snipeTR#8374 & karboran#2719
-# beta1.3v
+# beta1.4v
 
 echo tnx for kj89
 sleep 1
@@ -293,8 +293,9 @@ crontab -l | grep -v 'sudo /usr/local/bin/helpseiupdate'  | crontab -
 
 #run first cosmovisor for $HOME/.sei/cosmovisor/current/bin/seid file link create.
 sudo cp "./cosmos-sdk/cosmovisor/cosmovisor" "/usr/local/bin/"
-DAEMON_HOME=$HOME/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true ./cosmos-sdk/cosmovisor/cosmovisor run start &
-sleep 5
+echo "please wait..."
+DAEMON_HOME=$HOME/.sei DAEMON_NAME=seid DAEMON_RESTART_AFTER_UPGRADE=true ./cosmos-sdk/cosmovisor/cosmovisor run start > /dev/null 2>&1
+sleep 4
 kill "$(pidof cosmovisor)"
 wait
 

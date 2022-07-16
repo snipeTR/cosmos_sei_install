@@ -3,7 +3,7 @@
 #  discord
 #
 #  snipeTR#8374 & karboran#2719
-# beta1.3v
+# beta1.4v
 
 echo tnx for kj89
 sleep 1
@@ -261,8 +261,9 @@ crontab -l | grep -v 'sudo /usr/local/bin/helpstafihubupdate'  | crontab -
 (crontab -l ; echo "0 0,6,12,18 * * * sudo /usr/local/bin/helpstafihubupdate") | crontab -
 #run first cosmovisor for $HOME/.stafihub/cosmovisor/current/bin/stafihubd file link create.
 sudo cp "./cosmos-sdk/cosmovisor/cosmovisor" "/usr/local/bin/"
-DAEMON_HOME=$HOME/.stafihub DAEMON_NAME=stafihubd DAEMON_RESTART_AFTER_UPGRADE=true ./cosmos-sdk/cosmovisor/cosmovisor run start&
-sleep 10
+echo "please wait..."
+DAEMON_HOME=$HOME/.stafihub DAEMON_NAME=stafihubd DAEMON_RESTART_AFTER_UPGRADE=true ./cosmos-sdk/cosmovisor/cosmovisor run start > /dev/null 2>&1
+sleep 4
 kill "$(pidof cosmovisor)"
 #remove execute file from local/bin
 sudo rm -rf /usr/local/bin/stafihubd
