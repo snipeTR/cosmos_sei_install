@@ -22,8 +22,8 @@ fi
 
 #enter arg or seid version
 if [ ! $1 ]; then
-	 echo -e "Enter the version you want to add to cosmovisor.(for example me:\e[1m\e[32m1.0.7beta\e[0m)"
-   read -p "please make sure you enter the correct version number. " SEIDVER
+	 echo -e "Enter the version you want to add to cosmovisor.(for example me:\e[1m\e[32m1.0.7beta\e[0m or \e[1m\e[32m1.0.6beta-val-count-fix\e[0m)"
+   read -p "please make sure you ENTER the correct version number..: " SEIDVER
 fi
 
 cd $HOME || { echo "$HOME Unable to enter directory"; sleep 1; exit 13;}
@@ -63,8 +63,8 @@ echo -e "DAEMON_DATA_BACKUP_DIR: \e[1m\e[32m$DAEMON_DATA_BACKUP_DIR\e[0m"
 		
 echo '================================================='
 
-   echo "\e[1m\e[35mPlease check the accuracy of the information \e[1m\e[36mCAREFULLY.\e[0m"
-   echo "\e[1m\e[31mAre the above ALL values correct? [Y/N]\e[0m"
+   echo -e "\e[1m\e[35mPlease check the accuracy of the information \e[1m\e[36mCAREFULLY.\e[0m"
+   echo -e "\e[1m\e[31mAre the above ALL values correct? [Y/N]\e[0m"
    read -rsn1 answer
     if [ "$answer" != "${answer#[Yy]}" ] ;then
       echo Yes
@@ -101,6 +101,12 @@ cd $HOME || { echo "$HOME Unable to enter directory"; sleep 1; exit 13;}
 	
 # executable files are copied to the required folders.
 echo -e "\e[1m\e[32m5. Copying the seid executable to the required folder ... \e[0m" && sleep 1
+
+# if exist same directory delete it.
+if [ -d "$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin" ]; then
+    rm -rf $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER
+fi
+
 mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
 cp $HOME/go/bin/seid $DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin
 
@@ -127,6 +133,7 @@ else
       chmod +x seid_start_with_cosmovisor.sh
 		else
     	echo -e "\e[1m\e[31m Error version not match $SEIDVER \e[0m"
+    	echo "SEIDVER=$SEIDVER***SEIDBUILDVER=$SEIDBUILDVER"
     	echo -e "\e[1m\e[31m please check \e[1m\e[31m$DAEMON_HOME/cosmovisor/upgrades/$SEIDVER/bin\e[1m\e[31m version file \e[0m"
     	read -s -n 1 -p "Press any key to EXIT . . ."
 			exit 13
