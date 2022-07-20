@@ -24,20 +24,7 @@ fi
 if [ ! $1 ]; then
 	 echo -e "Enter the version you want to add to cosmovisor.(for example me:\e[1m\e[32m1.0.7beta\e[0m)"
    read -p "please make sure you enter the correct version number. " SEIDVER
-else
-   SEIDVER=$1
 fi
-
-echo "Is $SEIDVER the version you want to install? [Y/N]"
-read -rsn1 answer
-   if [ "$answer" != "${answer#[Yy]}" ] ;then
-     echo Yes
-     SEIDVER=$1
-   else
-   echo your answer no, exiting script.
-     sleep 3
-   exit 13
-   fi
 
 cd $HOME || { echo "$HOME Unable to enter directory"; sleep 1; exit 13;}
 
