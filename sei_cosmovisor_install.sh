@@ -193,15 +193,15 @@ sed -i.bak -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:${S
 sudo rm -rf usr/local/bin/seiport
 echo -e "\e[1m\e[32m create seiport command /usr/local/bin \e[0m" && sleep 3
 echo echo curl -s localhost:${SEI_PORT}657/status >seiport
-echo echo proxy_app = :${SEI_PORT}658 >>seiport
-echo echo laddr = :${SEI_PORT}657 >>seiport
-echo echo pprof_laddr = :${SEI_PORT}060 >>seiport
-echo echo laddr = :${SEI_PORT}656 >>seiport
-echo echo prometheus_listen_addr = :${SEI_PORT}660 >>seiport
-echo echo address = :${SEI_PORT}317 >>seiport
-echo echo address = :${SEI_PORT}080 >>seiport
-echo echo address = :${SEI_PORT}090 >>seiport
-echo echo address = :${SEI_PORT}091 >>seiport
+echo echo proxy PORT = :${SEI_PORT}658 >>seiport
+echo echo RPC server PORT = :${SEI_PORT}657 >>seiport
+echo echo pprof listen PORT = :${SEI_PORT}060 >>seiport
+echo echo p2p PORT = :${SEI_PORT}656 >>seiport
+echo echo prometheus PORT = :${SEI_PORT}660 >>seiport
+echo echo api server PORT = :${SEI_PORT}317 >>seiport
+echo echo rosetta PORT = :${SEI_PORT}080 >>seiport
+echo echo gRPC server PORT = :${SEI_PORT}090 >>seiport
+echo echo gRPC-web server PORT = :${SEI_PORT}091 >>seiport
 chmod +x ./seiport
 sudo mv ./seiport /usr/local/bin
 

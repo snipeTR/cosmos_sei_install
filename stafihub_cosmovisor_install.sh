@@ -171,16 +171,16 @@ sed -i.bak -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:${s
 #port_description file
 sudo rm -rf usr/local/bin/stafihubport
 echo -e "\e[1m\e[32m create stafihubport command /usr/local/bin \e[0m" && sleep 3
-echo echo curl -s localhost:${stafihub_PORT}657/status >stafihubport
-echo echo proxy_app = :${stafihub_PORT}658 >>stafihubport
-echo echo laddr = :${stafihub_PORT}657 >>stafihubport
-echo echo pprof_laddr = :${stafihub_PORT}060 >>stafihubport
-echo echo laddr = :${stafihub_PORT}656 >>stafihubport
-echo echo prometheus_listen_addr = :${stafihub_PORT}660 >>stafihubport
-echo echo address = :${stafihub_PORT}317 >>stafihubport
-echo echo address = :${stafihub_PORT}080 >>stafihubport
-echo echo address = :${stafihub_PORT}090 >>stafihubport
-echo echo address = :${stafihub_PORT}091 >>stafihubport
+echo echo curl -s localhost:${SEI_PORT}657/status >stafihubport
+echo echo proxy PORT = :${SEI_PORT}658 >>stafihubport
+echo echo RPC server PORT = :${SEI_PORT}657 >>stafihubport
+echo echo pprof listen PORT = :${SEI_PORT}060 >>stafihubport
+echo echo p2p PORT = :${SEI_PORT}656 >>stafihubport
+echo echo prometheus PORT = :${SEI_PORT}660 >>stafihubport
+echo echo api server PORT = :${SEI_PORT}317 >>stafihubport
+echo echo rosetta PORT = :${SEI_PORT}080 >>stafihubport
+echo echo gRPC server PORT = :${SEI_PORT}090 >>stafihubport
+echo echo gRPC-web server PORT = :${SEI_PORT}091 >>stafihubport
 chmod +x ./stafihubport
 sudo mv ./stafihubport /usr/local/bin
 # disable indexing
