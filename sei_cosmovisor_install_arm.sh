@@ -104,6 +104,12 @@ sudo apt update && sudo apt upgrade -y
 echo -e "\e[1m\e[32m2. Installing dependencies... \e[0m" && sleep 1
 # packages
 sudo apt-get install software-properties-common -y
+
+wget -O bashtop.deb http://archive.ubuntu.com/ubuntu/pool/universe/b/bashtop/bashtop_0.9.25-1_all.deb
+sudo dpkg -i ./bashtop.deb
+sleep 1
+rm ./bashtop.deb
+
 #sudo add-apt-repository ppa:bashtop-monitor/bashtop -y
 #sudo apt install bashtop -y
 sudo apt install curl build-essential git wget jq make gcc tmux tree mc software-properties-common net-tools bashtop qrencode htop -y
