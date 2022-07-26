@@ -33,3 +33,6 @@ What the script does are:
   - **seid_start_with_service.sh** cosmovisor olarak çalışan uygulamayı kapatır ve servis olarak çalışmasını sağlar.
 - It provides an option to create a wallet at the end of the installation.
 - Various checks for incorrect user login, written and colored help texts and warnings about points to be considered.
+
+![image](https://user-images.githubusercontent.com/31975916/181040016-d93b2477-2ea4-4cbb-b7fb-50cf9e741ece.png)
+
