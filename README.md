@@ -36,3 +36,4 @@ What the script does are:
 
 ![image](https://user-images.githubusercontent.com/31975916/181040016-d93b2477-2ea4-4cbb-b7fb-50cf9e741ece.png)
 
+[![snipeTR's GitHub stats](https://github-readme-stats.vercel.app/api?username=snipeTR&theme=dracula)]
