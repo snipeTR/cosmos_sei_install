@@ -344,9 +344,9 @@ echo -e "Do you want to create wallets? [Y/N]"
          		  read -p "Enter \e[1m\e[34mnew\e[0m wallet name: " WALLETT
          		  
          		  echo "export WALLET=$WALLET" >> "$HOME"/.bash_profile
-         		  stchaind keys add $WALLETT
+         		  stchaind keys add --hd-path "m/44'/606'/0'/0/0" --keyring-backend $WALLETT
          	  else
-         	    stchaind keys add $WALLET
+         	    stchaind keys add --hd-path "m/44'/606'/0'/0/0" --keyring-backend $WALLET
          	  fi
          	 echo -e "\n\e[0m\e[31mThe top line is 24 words.\e[0m \e[0m\e[36mThese words are a secret, do not publish, do not show in public.\e[0m\n\n\n"
          else
