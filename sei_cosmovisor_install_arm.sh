@@ -104,7 +104,8 @@ sudo apt update && sudo apt upgrade -y
 echo -e "\e[1m\e[32m2. Installing dependencies... \e[0m" && sleep 1
 # packages
 sudo apt-get install software-properties-common -y
-sudo add-apt-repository ppa:bashtop-monitor/bashtop -y
+#sudo add-apt-repository ppa:bashtop-monitor/bashtop -y
+#sudo apt install bashtop -y
 sudo apt install curl build-essential git wget jq make gcc tmux tree mc software-properties-common net-tools bashtop qrencode htop -y
 
 # install go function
