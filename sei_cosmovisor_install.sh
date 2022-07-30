@@ -10,7 +10,7 @@ sleep 1
 cd "$HOME" || { echo "Unable to enter $HOME directory"; sleep 1; exit 13;}
 #update script download
 if [ -f sei_cosmovisor_update.sh ]; then rm -rf sei_cosmovisor_update.sh; fi
-wget -O "sei_cosmovisor_update.sh" "https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_update.sh> /dev/null 2>&1 && chmod +x sei_cosmovisor_update.sh"
+wget -O "sei_cosmovisor_update.sh" "https://raw.githubusercontent.com/snipeTR/cosmos_sei_install/main/sei_cosmovisor_update.sh"> /dev/null 2>&1 && chmod +x sei_cosmovisor_update.sh"
 
 if [ -f ".bash_profile" ]; then 
 		if [ -f ".bsh_profil_org" ]; then
