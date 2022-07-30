@@ -161,7 +161,7 @@ if [ -d "$DIR" ]; then
 fi
 git clone https://github.com/sei-protocol/sei-chain.git
 cd sei-chain || { echo "Unable to enter sei-chain directory"; sleep 1; exit 13;}
-git checkout 1.0.7beta-postfix
+git checkout 1.0.6beta-val-count-fix
 make install 
 sudo cp ~/go/bin/seid /usr/local/bin/seid
 echo -e "\e[1m\e[32m  seid build end... \e[0m"
